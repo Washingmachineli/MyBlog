@@ -7,9 +7,9 @@
               :key="index"
               :class="{isActive:(mouseActive && (currentMouseIndex === item)), isActive: (currentIndex === index)}"
               @click="itemClick(item, index)">
-          {{item}}{{link[index]}}
+          {{item}}
           <nav-bar-item :small-title="menu[item]"
-                        v-if="isShow && currentIndex === index"
+                        v-show="isShow && currentIndex === index"
                         @labelClick="labelClick"
                         :link="itemLink"/>
         </span>
@@ -29,8 +29,8 @@
         default:{}
       },
       link: {
-        type: Object,
-        default:{}
+        type: Array,
+        default: []
       }
     },
     components: {
@@ -47,12 +47,12 @@
     mounted() {
       let _this = this;
       setTimeout(function() {
-        _this.currentIndex = Object.keys(_this.link).findIndex(index => index == _this.$route.path)
+        _this.currentIndex = _this.link.findIndex(index => index == _this.$route.path)
       }, 500);
     },
     computed: {
       itemLink() {
-        return this.link[Object.keys(this.link)[this.currentIndex]]
+        return this.link[this.currentIndex]
       }
     },
     methods: {
@@ -65,7 +65,7 @@
         else{
           //跳转
           this.isShow = false
-          const path = Object.keys(this.link)[index]
+          const path = this.link[index]
           if(this.$route.path !== path) {
             //catch(err=>err)防止多次点击同一路由地址产生报错
             this.$router.replace(path).catch(err=>err);

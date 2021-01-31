@@ -23,6 +23,17 @@ export function findLabelInfo(content) {
     data: {
       'content': content
     },
-    url: '/home/labelInfo',
+    url: '/home/findLabelInfo',
+  })
+}
+
+//查看文章详情
+export function findArticle(content) {
+  return request({
+    method: 'post',
+    data: {
+      'id': content
+    },
+    url: '/blog/findArticle',
   })
 }

@@ -22,7 +22,7 @@ router.get('/labelInfo', function(req, res, next) {
   })
 });
 
-router.post('/labelInfo', function(req, res, next) {
+router.post('/findLabelInfo', function(req, res, next) {
   let params = req.body;
   label.findLabelInfo(params,data => {
 

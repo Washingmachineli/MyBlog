@@ -5,21 +5,24 @@
     </div>
     <div>
       <span class="label"
-            :style="{'color': labelInfo[x].color,'background-color': labelInfo[x].backgroundColor}"
-            v-for="x in Object.keys(labelInfo)">{{x}}</span>
+            v-for="x in Object.keys(labelInfo)"
+            :style="{'background-color': randomColor(x)}">{{x}}</span>
     </div>
   </div>
 </template>
 
 <script>
+  import {randomColorMixin} from "../../../common/mixin";
+
   export default {
     name: "LabelShow",
     props: {
       labelInfo: {
         type: Object,
-        default: {}
+        default: ()=>{}
       }
-    }
+    },
+    mixins: [randomColorMixin],
   }
 </script>
 
@@ -45,7 +48,7 @@
     margin: 0 5px;
     padding: 2px 5px;
     border-radius: 5px;/*
-    background-color: red;
-    color: white;*/
+    background-color: red;*/
+    color: white;
   }
 </style>

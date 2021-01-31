@@ -1,12 +1,20 @@
-var express = require('express');
-var router = express.Router();
-var article = require('../Modules/article')
-var label = require('../Modules/label')
+let express = require('express');
+let router = express.Router();
+let article = require('../Modules/article')
+let label = require('../Modules/label')
 
-
-router.post('/labelInfo', function(req, res, next) {
+router.post('/findArticleInfoByKind', function(req, res, next) {
   let params = req.body;
-  article.findArticleByKind(params,data => {
-    console.log(data)
+  article.findArticleInfoByKind(params,data => {
+    res.send(data);
   })
 });
+
+router.post('/findArticle', function(req, res, next) {
+  let params = req.body;
+  article.findArticle(params,data => {
+    res.send(data);
+  })
+});
+
+module.exports = router

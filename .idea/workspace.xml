@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3b5ead1e-569c-45d3-9df9-42b99d1153ff" name="默认更改列表" comment="">
+      <change beforePath="$PROJECT_DIR$/blogServer/Modules/article.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogServer/Modules/article.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogServer/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogServer/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogServer/routes/blog.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogServer/routes/blog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogServer/routes/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogServer/routes/home.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1nPu5jOWrfvRjQ2ZqAKfwDVpbby" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/blog" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b5ead1e-569c-45d3-9df9-42b99d1153ff" name="默认更改列表" comment="" />
+      <created>1611303867602</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611303867602</updated>
+      <workItem from="1611303877994" duration="706000" />
+      <workItem from="1611307024281" duration="16000" />
+      <workItem from="1611545747163" duration="4000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1611307036777">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1611307036777" />
+  </component>
+</project>

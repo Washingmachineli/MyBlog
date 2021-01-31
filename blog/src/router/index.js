@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 const Home = () => import('views/home/Home')
 const Blog = () => import('views/blog/Blog')
+const BlogDetail = () => import('views/blogDetail/BlogDetail')
 const Message = () => import('views/message/Message')
 const About = () => import('views/about/About')
 const Hobby = () => import('views/about/Hobby')
@@ -32,6 +33,10 @@ const routes = [
   {
     path: '/blog',
     component: Blog
+  },
+  {
+    path: '/blogDetail',
+    component: BlogDetail
   },
   {
     path: '/message',

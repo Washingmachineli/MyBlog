@@ -3,7 +3,7 @@ import {getArticleInfo, getLabelInfo} from "../network/home";
 export const articleListMixin = {
   data(){
     return {
-      articleInfo: [],
+      articleInfo: {},
       labelInfo: {},
     }
   },
@@ -28,8 +28,31 @@ export const articleListMixin = {
     //填充父组件高度
     articleLoad(height){
       let content = document.getElementById('content')
-      content.style.height = height;
-      console.log(content.style.height);
+      if(content.style.height < height) {
+        content.style.height = height;
+      }
+    }
+  }
+}
+
+
+export const randomColorMixin = {
+  data() {
+    return {
+      colors: {},
+    }
+  },
+  methods: {
+    randomColor(content) {
+      if(Object.keys(this.colors).indexOf(content) === -1)//不存在
+      {
+        let col = "#";
+        for (let i = 0; i < 6; i++) {
+          col += parseInt(Math.random() * 16).toString(16);
+        }
+        this.colors[content] = col;
+      }
+      return this.colors[content];
     }
   }
 }

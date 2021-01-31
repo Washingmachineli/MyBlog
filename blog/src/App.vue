@@ -13,6 +13,8 @@
   import TimeClock from "./components/common/tImeClock/TimeClock";
   import Floor from "./components/common/floor/Floor";
 
+  import {getArticleKind} from "./network/app";
+
   export default {
     name: "App",
     components: {
@@ -28,13 +30,19 @@
           '留言': [],
           '关于': ['爱好', '摄影'],
         },
-        link: {
-          '/home': [],
-          '/blog': [],
-          '/message': [],
-          '/about': ['/hobby', '/movie']
-        }
+        link: [
+          '/home',
+          '/blog',
+          '/message',
+          '/about'
+        ]
       }
+    },
+    created() {
+      getArticleKind().then( data => {
+        this.menu['博客'].push(...data)
+        console.log(this.menu)
+      })
     },
   }
 </script>
@@ -54,6 +62,7 @@
     overflow-y: scroll;
     width: 100%;
     height: 100%;
+    color: black;
   }
   #app::-webkit-scrollbar {
     display: none;
@@ -79,6 +88,6 @@
   }
 
   .floor {
-    margin-top: 80px;
+    margin-top: 100px;
   }
 </style>

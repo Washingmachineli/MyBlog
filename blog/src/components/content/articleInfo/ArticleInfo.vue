@@ -1,18 +1,18 @@
 <template>
   <div id="article-info">
-    <div class="item" v-for="item in articleInfo">
+    <div class="item" v-for="item in Object.keys(articleInfo)">
       <div class="picture">
-        <img :src="item.picture" @load="pictureLoad"/>
+        <img :src="articleInfo[item].picture" @load="pictureLoad"/>
       </div>
       <div class="info">
-        <div class="title">{{item.title}}</div>
-        <div class="author">{{item.author}}</div>
-        <div class="describe">简介：{{item.describe}}</div>
+        <div class="title" @click="titleClick(articleInfo[item].id)">{{item}}</div>
+        <div class="author">{{articleInfo[item].author}}</div>
+        <div class="describe">简介：{{articleInfo[item].describe}}</div>
         <div class="other">
           <span class="label"
-                :style="{'color': labelInfo[x].color,'background-color': labelInfo[x].backgroundColor}"
-                v-for="x in item.label">{{x}}</span>
-          <div class="creat-time">{{item.createTime}}</div>
+                v-for="x in articleInfo[item].label"
+                :style="{'background-color': randomColor(x)}">{{x}}</span>
+          <div class="creat-time">{{articleInfo[item].createTime}}</div>
         </div>
       </div>
     </div>
@@ -21,17 +21,19 @@
 
 <script>
   import {debounce} from "../../../common/utils";
+  import {randomColorMixin} from "../../../common/mixin";
 
   export default {
     name: "ArticleInfo",
+    mixins: [randomColorMixin],
     props: {
       articleInfo: {
-        type: Array,
-        default: []
+        type: Object,
+        default: ()=>{}
       },
       labelInfo: {
         type: Object,
-        default: {}
+        default: ()=>{}
       }
     },
     methods: {
@@ -39,6 +41,10 @@
       pictureLoad() {
         let article = document.getElementById('article-info')
         debounce(this.$emit('articleLoad', window.getComputedStyle(article).height), 100);
+      },
+      titleClick(id) {//{name:'/blogDetail'}, params:{'参数':'参数Value'}
+        this.$store.dispatch('addCurrentArticle', id)
+        this.$router.push('/blogDetail')
       }
     },
   }
@@ -73,6 +79,7 @@
     display: flex;
     box-shadow: 3px 5px 5px #888888;
     color:black;
+    border: 1px solid #888888;
   }
 
   .picture {
@@ -100,41 +107,45 @@
   }
 
   .title, .author{
-    padding-top: 10px;
     font-family: articleTitle;
-    display: inline-block;
-  }
-
-  .describe {
-    padding-top: 20px;
-    font-size: 20px;
-    font-family: '楷体';
   }
 
   .title {
+    padding-top: 15px;
     font-size: 50px;
     font-weight: bold;
   }
 
   .author {
-    font-size: 25px;
+    padding-top: 5px;
+    font-size: 20px;
+  }
+
+  .describe {
+    padding-top: 15px;
+    font-size: 20px;
+    font-family: '楷体';
   }
 
   .other {
     font-size: 15px;
-    padding-top: 30px;
+    padding-top: 15px;
   }
 
   .label {
     margin: 0 5px;
     padding: 2px 5px;
     border-radius: 5px;/*
-    background-color: red;
-    color: white;*/
+    background-color: red;*/
+    color: white;
   }
 
   .creat-time {
     padding-top: 20px;
     font-family: articleCreateTime;
+  }
+
+  .title:hover {
+    cursor:pointer
   }
 </style>

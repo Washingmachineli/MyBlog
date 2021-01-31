@@ -7,7 +7,7 @@ var ejs = require('ejs')
 
 var indexRouter = require('./routes');
 var homeRouter = require('./routes/home');
-var blogRouter = require('./routes/blog');
+var blogRouter = require('./routes/blog.js');
 
 var app = express();
 
@@ -56,5 +56,12 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+/*let article = require('./Modules/article')
+
+article.findArticle(data => {
+  console.log(data);
+})*/
+
 
 module.exports = app;

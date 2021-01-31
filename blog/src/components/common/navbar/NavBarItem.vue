@@ -1,7 +1,8 @@
 <template>
   <div class="nav-bar-item">
+    <div class="ran"></div>
     <ul class="content">
-      <li :class="{mouseOver:(currentMouse === item), isActive:(currentIndex === item) || (currentPath === link[index])}"
+      <li :class="{mouseOver:(currentMouse === item), isActive:(currentIndex === index)}"
           v-for="(item, index) in smallTitle"
           :key="index"
           @click.stop="itemClick(item, index)">{{item}}</li>
@@ -15,13 +16,12 @@
     props: {
       smallTitle: {
         type: Array,
-        default: ()=>[]
+        default: []
       },
       link: {
-        type: Array,
-        default: ()=>[]
+        type: String,
+        default: null
       },
-      titleIndex: 0
     },
     data() {
       return {
@@ -45,9 +45,8 @@
 
         this.$emit("labelClick")
 
-        this.currentIndex = item
-        const path = this.link[index]
-
+        this.currentIndex = index
+        const path = this.link
         //catch(err=>err)防止多次点击同一路由地址产生报错
         this.$router.replace(path).catch(err=>err);
         /*
@@ -65,24 +64,34 @@
     position: absolute;
     z-index: 6;
   }
+  .ran{
+    position: absolute;
+    left: -30px;
+    top: 26px;
+    width: 10px;
+    height: 10px;
+    font-size: 0;
+    line-height: 0;
+    overflow: hidden;
+    border-width: 8px;
+    border-style: dashed dashed solid dashed;
+    border-color: transparent transparent #ddd transparent;
+  }
 
   .content {
     position: absolute;
     top: 40px;
-    left: -50px;
-    width: 60px;
+    left: -75px;
+    width: 110px;
     background-color: #fff;
     text-align: center;
     font-size: 17px;
-  }
-
-  .content {
     border:2px solid #ddd;
     border-radius: 5px;
   }
 
   .content li {
-    list-style: none;
+    list-style: none;white-space:nowrap
   }
 
   .mouseOver {
