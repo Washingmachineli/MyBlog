@@ -8,11 +8,11 @@ export function getArticleInfo() {
   })
 }
 
-//获取所有标签样式
-export function getLabelInfo(content) {
+//获取所有标签
+export function getArticleLabel(content) {
   return request({
     method: 'get',
-    url: '/home/labelInfo',
+    url: '/home/getArticleLabel',
   })
 }
 

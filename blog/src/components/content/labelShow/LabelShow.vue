@@ -5,7 +5,7 @@
     </div>
     <div>
       <span class="label"
-            v-for="x in Object.keys(labelInfo)"
+            v-for="x in labelInfo"
             :style="{'background-color': randomColor(x)}">{{x}}</span>
     </div>
   </div>
@@ -18,8 +18,8 @@
     name: "LabelShow",
     props: {
       labelInfo: {
-        type: Object,
-        default: ()=>{}
+        type: Array,
+        default: []
       }
     },
     mixins: [randomColorMixin],

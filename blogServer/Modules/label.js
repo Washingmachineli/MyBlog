@@ -1,7 +1,7 @@
 var db = require('../MongoDB/connectDB')
 var mongoose = require('mongoose')
 
-
+//
 exports.getLabelInfo = function(callback) {
   db.find("Label",{},function(err,result){
 

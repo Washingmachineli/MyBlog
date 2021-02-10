@@ -9,6 +9,7 @@ Vue.use(Vuex)
 
 const state = {
   articleId: null,
+  articleKind: null,
 }
 
 const store = new Vuex.Store({

@@ -5,13 +5,14 @@
       <div class="content">
         <span v-for="(item, index) in Object.keys(menu)"
               :key="index"
-              :class="{isActive:(mouseActive && (currentMouseIndex === item)), isActive: (currentIndex === index)}"
+              :class="{isActive: (currentIndex === index)}"
               @click="itemClick(item, index)">
           {{item}}
           <nav-bar-item :small-title="menu[item]"
-                        v-show="isShow && currentIndex === index"
+                        v-show="isShow && currentShow === index"
                         @labelClick="labelClick"
-                        :link="itemLink"/>
+                        :link="itemLink"
+                        :index="index"/>
         </span>
       </div>
     </div>
@@ -38,9 +39,8 @@
     },
     data() {
       return {
-        currentMouseIndex: null,
-        mouseActive: false,
         currentIndex: 0,
+        currentShow: 0,
         isShow:false,
       }
     },
@@ -52,18 +52,19 @@
     },
     computed: {
       itemLink() {
-        return this.link[this.currentIndex]
+        return this.link[this.currentShow]
       }
     },
     methods: {
       itemClick(item, index) {
         //点击变色
-        this.currentIndex = index;
+        this.currentShow = index;
         if(Object.keys(this.menu[item]).length !== 0) {
           this.isShow = !this.isShow
         }
         else{
           //跳转
+          this.currentIndex = index
           this.isShow = false
           const path = this.link[index]
           if(this.$route.path !== path) {
@@ -72,8 +73,9 @@
           }
         }
       },
-      labelClick() {
+      labelClick(index) {
         this.isShow = false
+        this.currentIndex = index
       }
     }
   }

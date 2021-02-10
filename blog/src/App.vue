@@ -41,7 +41,6 @@
     created() {
       getArticleKind().then( data => {
         this.menu['博客'].push(...data)
-        console.log(this.menu)
       })
     },
   }
@@ -88,6 +87,6 @@
   }
 
   .floor {
-    margin-top: 100px;
+    margin-top: 65px;
   }
 </style>

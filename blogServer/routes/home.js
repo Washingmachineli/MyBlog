@@ -1,7 +1,6 @@
 let express = require('express');
 let router = express.Router();
 let article = require('../Modules/article')
-let label = require('../Modules/label')
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -15,16 +14,8 @@ router.get('/articleInfo', function(req, res, next) {
   })
 });
 
-router.get('/labelInfo', function(req, res, next) {
-  label.getLabelInfo(data => {
-
-    res.send(data);
-  })
-});
-
-router.post('/findLabelInfo', function(req, res, next) {
-  let params = req.body;
-  label.findLabelInfo(params,data => {
+router.get('/getArticleLabel', function(req, res, next) {
+  article.getArticleLabel(data => {
 
     res.send(data);
   })

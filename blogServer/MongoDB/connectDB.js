@@ -24,7 +24,7 @@ exports.insertOne = function (collectionName, json, callback) {
     var db = client.db("Blog")
     db.collection(collectionName).insertOne(json, function (err, result) {
       callback(err, result);
-      db.close(); //关闭数据库
+      client.close();
     })
   })
 };

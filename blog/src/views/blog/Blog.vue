@@ -6,9 +6,9 @@
             :class='{isActive: allShow === currentIndex}'
             @click="labelClick('all', -1)">全部</span>
       <span class="label"
-            v-for="(item, index) in Object.keys(labelInfo)"
+            v-for="(item, index) in labelInfo"
             :class='{isActive: index === currentIndex}'
-            :style="{'color': labelInfo[item].color,'background-color': labelInfo[item].backgroundColor}"
+            :style="{'background-color': randomColor(item)}"
             @click="labelClick(item, index)">{{item}}</span>
     </div>
 
@@ -21,31 +21,32 @@
 <script>
   import ArticleInfo from "../../components/content/articleInfo/ArticleInfo";
 
-  import {getArticleInfo} from "../../network/home";
-  import {findArticleInfoByKind} from "../../network/blog";
-  import {articleListMixin} from "../../common/mixin";
+  import {getArticleByLabel} from "../../network/blog";
+  import {articleListByKindMixin, randomColorMixin} from "../../common/mixin";
+
   export default {
     name: "Blog",
-    mixins: [articleListMixin],
+    mixins: [articleListByKindMixin, randomColorMixin],
     components: {
-      ArticleInfo
+      ArticleInfo,
     },
     data() {
       return {
         allShow: -1,
-        currentIndex: -1
+        currentIndex: -1,
+        currentKind: '散文诗集',
       }
     },
     methods: {
       labelClick(item, index) {
         this.currentIndex = index
         if(item === 'all') {
-          getArticleInfo().then( data => {
-            this.articleInfo = data
+          getArticleByLabel(this.articleKind, null).then( res => {
+            this.articleInfo = res
           })
         }else {
-          findArticleInfoByKind(item).then( data => {
-            this.articleInfo = data
+          getArticleByLabel(this.articleKind, item).then( res => {
+            this.articleInfo = res
           })
         }
       }
@@ -62,7 +63,8 @@
   }
 
   .blog {
-    padding: 0 10%;
+    padding: 1% 10%;
+
   }
 
   .label-show {

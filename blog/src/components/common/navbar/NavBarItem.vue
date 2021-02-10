@@ -2,7 +2,7 @@
   <div class="nav-bar-item">
     <div class="ran"></div>
     <ul class="content">
-      <li :class="{mouseOver:(currentMouse === item), isActive:(currentIndex === index)}"
+      <li :class="{mouseOver:(currentMouse === item), isActive:(currentIndex === index) && (currentPath === link)}"
           v-for="(item, index) in smallTitle"
           :key="index"
           @click.stop="itemClick(item, index)">{{item}}</li>
@@ -22,6 +22,10 @@
         type: String,
         default: null
       },
+      index: {
+        type: Number,
+        default: 0
+      }
     },
     data() {
       return {
@@ -30,22 +34,29 @@
       }
     },
     computed: {
+      //当前路由
       currentPath() {
         return this.$route.path
       }
     },
     methods: {
+      //显示
       overShow(item) {
         this.currentMouse = item;
       },
+      //隐藏
       overHidden() {
         this.currentMouse = null;
       },
       itemClick(item, index) {
-
-        this.$emit("labelClick")
-
+        //点击后，下拉窗消失
+        this.$emit("labelClick", this.index)
         this.currentIndex = index
+
+        //将选中的分类存到store
+        this.$store.dispatch('changeArticleKind', item)
+
+        //跳转
         const path = this.link
         //catch(err=>err)防止多次点击同一路由地址产生报错
         this.$router.replace(path).catch(err=>err);

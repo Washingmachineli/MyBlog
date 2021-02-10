@@ -30,11 +30,11 @@
       articleInfo: {
         type: Object,
         default: ()=>{}
-      },
+      },/*
       labelInfo: {
         type: Object,
         default: ()=>{}
-      }
+      }*/
     },
     methods: {
       //图片加载好后，将高度发送给父组件
