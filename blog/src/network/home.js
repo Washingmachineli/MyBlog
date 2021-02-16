@@ -1,9 +1,12 @@
 import {request} from "./request";
 
 //获取所有文章信息
-export function getArticleInfo() {
+export function ArticleInfo(page) {
   return request({
-    method: 'get',
+    method: 'post',
+    data: {
+      'page': page
+    },
     url: '/home/articleInfo',
   })
 }

@@ -44,11 +44,12 @@ export function addComment(commentator, article, comment) {
   })
 }
 
-export function getComment(article) {
+export function getComment(article, page) {
   return request({
     method: 'post',
     data: {
-      'article': article
+      'article': article,
+      'page': page
     },
     url: '/blog/getComment',
   })

@@ -7,8 +7,8 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/articleInfo', function(req, res, next) {
-  article.getArticleInfo(data => {
+router.post('/articleInfo', function(req, res, next) {
+  article.ArticleInfo(req.body, data => {
 
     res.send(data);
   })

@@ -148,6 +148,17 @@ exports.distinct = function (collectionName, json, callback) {
 };
 
 
+//获取所有符合条件的值的数量
+exports.getAllCount = function (collectionName, json, callback) {
+  _connectDB(function (err, client) {
+    let db = client.db("Blog")
+    db.collection(collectionName).count(json).then(function(count) {
+      callback(err, count);
+      client.close(); //关闭数据库
+    });
+  })
+};
+
 /*
 //查通过id查找
 exports.findById = function (collectionName, json, C, D) {

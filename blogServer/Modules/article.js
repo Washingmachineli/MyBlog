@@ -2,7 +2,7 @@ let db = require('../MongoDB/connectDB')
 let mongoose = require('mongoose')
 let ObjectID = require('mongodb').ObjectID;
 
-exports.getArticleInfo = function(callback) {
+exports.ArticleInfo = function(params, callback) {/*
   db.find("Article",{},function(err, result){
 
     if(err){
@@ -28,7 +28,46 @@ exports.getArticleInfo = function(callback) {
       }
       return callback(res)
     }
+  })*/
+
+  db.getAllCount("Article", {}, function (err, result) {
+
+    if (err) {
+      return callback("-3")//服务器错误
+    } else {
+      let length = result;
+      db.find("Article",{},{sort:{'createTime': -1}, page: params.page, pageamount: 5}, function(err, result){
+
+        if(err){
+          return callback("-3")//服务器错误
+        }
+        else{
+          let res = {
+            'data': {},
+            'count': 0
+          }
+          let i = 0
+          while (result[i])
+          {
+            res['data'][i] = {
+              id: result[i]._id,
+              title: result[i].title,
+              author: result[i].author,
+              describe: result[i].describe,
+              label: result[i].label,
+              picture: result[i].picture,
+              createTime: result[i].createTime,
+            }
+            i++
+          }
+          res['count'] = length
+
+          return callback(res)
+        }
+      })
+    }
   })
+
 }
 
 

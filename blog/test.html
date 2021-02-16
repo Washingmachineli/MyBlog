@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    .ex{
+      height: 100px;
+      overflow: hidden;
+    }
+
+    .ex1 div{
+      height: 20px;
+    }
+
+    .ex1{
+      animation: aa 3s infinite forwards;
+    }
+
+    @keyframes aa
+    {
+      0% {transform:translatey( 0px);}
+      100% {transform:translatey(-60px);}
+    }
+
+  </style>
+</head>
+<body>
+<ul id="news"></ul>
+
+</body>
+<script>var newsSize = 0;
+jQuery().ready(function () {
+  //加载平台新闻
+  loadNews('news');
+
+  //滚动显示
+  scrollNews();
+})
+
+var scrollNews = function (){
+  var marginTop =0;
+  // 判断有多少个li
+  var lengli = $("#news li").length -2;
+  setInterval(function(){
+    if(newbool || newsSize < 10) return;//判断运行和停止,大于10条数据进行滚动显示
+    $("#news li:first").animate({marginTop:marginTop--},10,function(){
+      if ((-marginTop) >= $(this).height()*lengli) {  //判断移出位置是否超过高度
+        $(this).appendTo($("#news"));  //把第一个节点移到ul后面
+        marginTop = 0;      //重新设置移动数值
+      }
+    });
+  },1000);
+  $("#news").mouseover(function(){   //li鼠标移入，停止移动
+    newbool=true;
+  });
+  $("#news").mouseout(function(){
+    newbool=false;
+  });
+}
+
+var loadNews = function(ulId){
+  var taskul = $('#' + ulId);
+  $.getJSON("findNewPublishByType.action", function (json) {
+    $.each(json.root, function (i, data) {
+      var title = data.title;
+      var id = data.id;
+      var createDate = data.createDate.replace(/T/g, " ")
+        .replace(/-/g, "/").substring(0,10);
+      var taskli = $('<li class="task_li"> '
+        + '<span style="color: #2a6496; font-weight: bolder" title="'
+        + title + '">' + title + '</span><span>(' + createDate + ')</span></li>');
+      taskul.append(taskli);
+      taskli.bind({
+        click: function (e) {
+          window.open("loadNewPublish.action?id=" + id);
+        }
+      });
+      newsSize = i + 1;
+    });
+  });
+}
+
+
+</script>
+</html>

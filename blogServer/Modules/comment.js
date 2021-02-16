@@ -5,7 +5,7 @@ let ReplaceString = require('./replaceString')
 
 exports.addComment = function(params, callback) {
     let commentator = ReplaceString.replaceStr(params.commentator);
-    let comment = ReplaceString.replaceStr(params.comment);
+    let comment = params.comment
     let article = params.article
 
     db.insertOne("Comment",{
@@ -24,25 +24,40 @@ exports.addComment = function(params, callback) {
 exports.getComment = function(params, callback) {
     let article = params.article
 
-    db.find("Comment",{'article': article},function(err, result){
+    db.getAllCount("Comment", {'article': article}, function (err, result) {
 
-        if(err){
+        if (err) {
             return callback("-3")//服务器错误
-        }
-        else{
-            let res = {}
-            let i = 0
-            while (result[i])
-            {
-                res[result[i]._id] = {
-                    commentator: result[i].commentator,
-                    comment: result[i].comment,
-                    article: result[i].article,
-                    commentTime: result[i].commentTime,
+        } else {
+            let length = result;
+            db.find("Comment",{'article': article},{sort:{'commentTime': -1}, page: params.page, pageamount: 5}, function(err, result){
+
+                if(err){
+                    return callback("-3")//服务器错误
                 }
-                i++
-            }
-            return callback(res)
+                else{
+                    let res = {
+                        'data': {},
+                        'count': 0
+                    }
+                    let i = 0
+                    while (result[i])
+                    {
+                        res['data'][result[i]._id] = {
+                            commentator: result[i].commentator,
+                            comment: result[i].comment,
+                            article: result[i].article,
+                            commentTime: result[i].commentTime,
+                        }
+                        i++
+                    }
+                    res['count'] = length
+
+                    return callback(res)
+                }
+            })
         }
     })
+
+
 }

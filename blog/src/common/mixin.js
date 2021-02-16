@@ -1,4 +1,11 @@
-import {getArticleInfo, getArticleLabel} from "../network/home";
+
+
+import Scroll from "@/components/common/scroll/Scroll";
+import Floor from "@/components/common/floor/Floor";
+
+import BackTop from "@/components/common/backTop/BackTop";
+
+import {ArticleInfo, getArticleLabel} from "../network/home";
 import {getArticleByKind, getLabelByKind} from "@/network/blog";
 import {mapGetters} from "vuex";
 
@@ -6,25 +13,32 @@ import {mapGetters} from "vuex";
 export const articleListMixin = {
   data(){
     return {
-      articleInfo: {},
+      articleInfo: [],
       labelInfo: [],
+      page: 0 ,
     }
   },
   created() {
     this._getLabel()
+    this._getArticleInfo()
   },
   methods: {
     //获取所有文章信息,取消异步，同步执行
     async _getArticleInfo() {
-      await getArticleInfo().then(data => {
-        this.articleInfo = data
+      await ArticleInfo(this.page).then(res => {
+        let obj = Object.keys(res.data)
+        let i = 0
+        while (obj[i]) {
+          this.articleInfo.push(res.data[i]);
+          i++
+        }
+        this.page = this.page + 1
       })
     },
     //获取所有标签
     async _getLabel() {
-      await getArticleLabel().then(data => {
-        this.labelInfo = data
-        this._getArticleInfo()
+      await getArticleLabel().then(res => {
+        this.labelInfo = res
       })
     },
 
@@ -119,3 +133,42 @@ export const randomColorMixin = {
   }
 }
 
+
+//返回顶部
+export const showBackTop = {
+  data(){
+    return {
+      isShowBackTop: false
+    }
+  },
+  components: {
+    BackTop
+  },
+  methods: {
+    backClick(){
+      this.$refs.scroll.scrollTo(0, 0);
+      //this.$refs.scroll.$data.scroll.scrollTo(0)
+    }
+  }
+
+}
+
+//返回顶部
+export const scrollSet = {
+  components: {
+    Scroll,
+    Floor
+  },
+  methods: {
+    contentScroll(position){
+      //判断是否显示backTop
+      this.isShowBackTop = (-position.y) > 1000
+      //判断tabControl是否要有吸顶效果
+      this.isTabFixed = (-position.y) > this.tabOffsetTop
+    },
+    articleLoad() {
+      this.$refs.scroll.refresh();
+    }
+  }
+
+}

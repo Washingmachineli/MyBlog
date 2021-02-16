@@ -1,15 +1,44 @@
 <template>
-  <div>
-    留言板
+  <div class="message">
+    <scroll class="scroll"
+            ref="scroll"
+            :probe-type="3"
+            @scroll="contentScroll"
+            :pull-up-load="true">
+      <div>
+        留言
+      </div>
+
+      <floor class="floor"/>
+    </scroll>
   </div>
 </template>
 
 <script>
+
+  import {scrollSet} from "@/common/mixin";
+
   export default {
-    name: "Message"
+    name: "Message",
+    components: {
+    },
+    mixins: [scrollSet],
   }
 </script>
 
 <style scoped>
+  .message {
+    position: relative;
+    height: 100vh;
+  }
+
+  .scroll {
+    position: absolute;
+    overflow: hidden;
+    top: 65px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
 
 </style>

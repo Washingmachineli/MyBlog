@@ -1,18 +1,18 @@
 <template>
-  <div id="article-info">
-    <div class="item" v-for="item in Object.keys(articleInfo)">
+  <div id="article-info" v-if="Object.keys(articleInfo).length !== 0">
+    <div class="item" v-for="item in articleInfo">
       <div class="picture">
-        <img :src="articleInfo[item].picture" @load="pictureLoad"/>
+        <img :src="item.picture" @load="pictureLoad"/>
       </div>
       <div class="info">
-        <div class="title" @click="titleClick(articleInfo[item].id)">{{item}}</div>
-        <div class="author">{{articleInfo[item].author}}</div>
-        <div class="describe">简介：{{articleInfo[item].describe}}</div>
+        <div class="title" @click="titleClick(item.id)">{{item.title}}</div>
+        <div class="author">{{item.author}}</div>
+        <div class="describe">简介：{{item.describe}}</div>
         <div class="other">
           <span class="label"
-                v-for="x in articleInfo[item].label"
+                v-for="x in item.label"
                 :style="{'background-color': randomColor(x)}">{{x}}</span>
-          <div class="creat-time">{{articleInfo[item].createTime}}</div>
+          <div class="creat-time">{{item.createTime}}</div>
         </div>
       </div>
     </div>
@@ -28,8 +28,8 @@
     mixins: [randomColorMixin],
     props: {
       articleInfo: {
-        type: Object,
-        default: ()=>{}
+        type: Array,
+        default: []
       },/*
       labelInfo: {
         type: Object,
