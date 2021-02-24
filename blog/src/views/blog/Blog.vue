@@ -4,7 +4,13 @@
             ref="scroll"
             :probe-type="3"
             @scroll="contentScroll"
+            @pullingUp="pullingUp"
             :pull-up-load="true">
+
+      <div class="banner">
+        <div>{{articleKind}}</div>
+      </div>
+
       <div class="label-show">
         <p class="show-info">分类：</p>
         <span class="label"
@@ -22,6 +28,8 @@
       </div>
       <floor class="floor"/>
     </scroll>
+    <back-top v-show="isShowBackTop"
+              @click.native="backClick"/>
   </div>
 </template>
 
@@ -29,11 +37,13 @@
   import ArticleInfo from "../../components/content/articleInfo/ArticleInfo";
 
   import {getArticleByLabel} from "../../network/blog";
-  import {articleListByKindMixin, randomColorMixin, scrollSet} from "../../common/mixin";
+  import {articleListByKindMixin, randomColorMixin, scrollSet, showBackTop} from "../../common/mixin";
+  import {debounce} from "@/common/utils";
+
 
   export default {
     name: "Blog",
-    mixins: [articleListByKindMixin, randomColorMixin, scrollSet],
+    mixins: [articleListByKindMixin, randomColorMixin, scrollSet, showBackTop],
     components: {
       ArticleInfo,
     },
@@ -42,20 +52,38 @@
         allShow: -1,
         currentIndex: -1,
         currentKind: '散文诗集',
+        labelKind: null
       }
     },
     methods: {
       labelClick(item, index) {
+        this.page = 0;
+        this.articleInfo = []
         this.currentIndex = index
         if(item === 'all') {
-          getArticleByLabel(this.articleKind, null).then( res => {
-            this.articleInfo = res
+          this.labelKind = null
+          getArticleByLabel(this.articleKind, null, this.page).then( res => {
+            this.articleInfo.push(...res)
+            this.page = this.page + 1
           })
         }else {
-          getArticleByLabel(this.articleKind, item).then( res => {
-            this.articleInfo = res
+          this.labelKind = item
+          getArticleByLabel(this.articleKind, item, this.page).then( res => {
+            this.articleInfo.push(...res)
+            this.page = this.page + 1
           })
         }
+      },
+      pullingUp() {
+
+        getArticleByLabel(this.articleKind, this.labelKind, this.page).then( res => {
+          if(res !== -1) {
+            this.articleInfo.push(...res)
+            this.page = this.page + 1
+          }
+
+          this.$refs.scroll.finishPullUp()
+        })
       }
     }
   }
@@ -69,9 +97,25 @@
     src: url('~assets/font/小熊冻冻奶.ttf'); /* IE9+ */
   }
 
-  .blog {
+ /* .blog {
     position: relative;
     height: 100vh;
+    background-image: url('~assets/img/blog/花.jpg');
+    background-size: 100%, cover;
+  }*/
+
+  .blog:before{
+    position: absolute;
+    background-image: url('../../assets/img/blog/花.jpg');
+    background-size:contain;/*
+    background-image: url("~assets/img/BlogDetail/雪压梅花枝.png");*/
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    content: '';
+    opacity: .2;
+    z-index: -1;
   }
 
   .scroll {
@@ -81,6 +125,27 @@
     left: 0;
     right: 0;
     bottom: 0;
+  }
+
+  .banner {
+    width: 100%;
+    height: 300px;
+    background-image: url('~assets/img/blog/小碎花壁纸背景.jpg') ,url('~assets/img/blog/小碎花壁纸背景.jpg');
+    background-size: contain, contain;
+    background-position: 0 80px, 0 0;
+    background-repeat: repeat-x;
+    display: table;
+    overflow:hidden;
+  }
+
+  .banner div {
+    color: black;
+    text-align: center;
+    font-size: 60px;
+    display: table-cell;
+    vertical-align: middle;
+    font-family: myFirstFont;
+    line-height: 70px;
   }
 
   .label-show {

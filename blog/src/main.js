@@ -5,11 +5,19 @@ import router from './router'
 
 import toast from 'components/common/toast'
 import FastClick from 'fastclick'
+import LazyLoad from 'vue-lazyload'
 
 Vue.config.devtools = true
 
 Vue.config.productionTip = false
 
+//图片懒加载
+Vue.use(LazyLoad, {
+  loading: require('./assets/img/common/loadingWhite.gif')
+})
+
+//bus总线
+Vue.prototype.$bus = new Vue()
 
 Vue.use(toast)
 

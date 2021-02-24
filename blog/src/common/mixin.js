@@ -1,12 +1,11 @@
-
-
 import Scroll from "@/components/common/scroll/Scroll";
 import Floor from "@/components/common/floor/Floor";
 
 import BackTop from "@/components/common/backTop/BackTop";
 
-import {ArticleInfo, getArticleLabel} from "../network/home";
-import {getArticleByKind, getLabelByKind} from "@/network/blog";
+import {ArticleInfo, } from "../network/home";
+import {getArticleByKind, articleKind, getLabelByKind} from "@/network/blog";
+import {checkToken} from "@/network/login";
 import {mapGetters} from "vuex";
 
 //获取所有文章列表信息
@@ -14,12 +13,12 @@ export const articleListMixin = {
   data(){
     return {
       articleInfo: [],
-      labelInfo: [],
+      kindInfo: [],
       page: 0 ,
     }
   },
   created() {
-    this._getLabel()
+    this._getKind()
     this._getArticleInfo()
   },
   methods: {
@@ -35,10 +34,10 @@ export const articleListMixin = {
         this.page = this.page + 1
       })
     },
-    //获取所有标签
-    async _getLabel() {
-      await getArticleLabel().then(res => {
-        this.labelInfo = res
+    //获取所有文章分类
+    async _getKind() {
+      await articleKind().then(res => {
+        this.kindInfo = res
       })
     },
 
@@ -56,12 +55,13 @@ export const articleListMixin = {
 export const articleListByKindMixin = {
   data(){
     return {
-      articleInfo: {},
+      articleInfo: [],
       labelInfo: [],
       kind: {
         type: String,
         default: '散文'
       },
+      page: 0,
     }
   },
   computed:{
@@ -79,19 +79,20 @@ export const articleListByKindMixin = {
       sessionStorage.setItem("articleKind", this.articleKind);
     });
     this._getLabel()
+    this._getArticleInfo()
   },
   methods: {
     //获取所有文章信息,取消异步，同步执行
     async _getArticleInfo() {
-      await getArticleByKind(this.articleKind).then( res => {
-        this.articleInfo = res
+      await getArticleByKind(this.articleKind, this.page).then( res => {
+        this.articleInfo.push(...res)
+        this.page = this.page + 1
       })
     },
     //获取所有标签
     async _getLabel() {
       await getLabelByKind(this.articleKind).then( res => {
         this.labelInfo = res
-        this._getArticleInfo()
       })
     },
 
@@ -153,8 +154,11 @@ export const showBackTop = {
 
 }
 
-//返回顶部
+//scroll插件
 export const scrollSet = {
+  created() {
+    this.$bus.$emit('viewLoad')
+  },
   components: {
     Scroll,
     Floor
@@ -172,3 +176,105 @@ export const scrollSet = {
   }
 
 }
+
+//检查是否登录
+export const checkLogin = {
+  inject:  ['reload', 'signIn', 'signOut'],
+  created() {
+    checkToken(this.token).then( res => {
+      console.log(res)
+      if(res.state === 0) {
+        sessionStorage.removeItem('token');
+        this.signOut()
+        this.$router.replace('/login').catch(err=>err)
+      }
+      else {
+        this.signIn()
+      }
+    })
+  },
+  computed: {
+    ...mapGetters(['token']),
+  },
+}
+
+
+/*
+
+export const musicSet = {
+    data () {
+      return {
+        playFlag: true,
+        clickMusicBtn: false,
+      }
+    },
+
+    async mounted () {
+      this.audioAutoPlay()
+      document.addEventListener("visibilitychange", (e) => { // 兼容ios微信手Q
+        if (this.clickMusicBtn) { // 点击了关闭音乐按钮
+          if (this.playFlag) {
+            this.audioAutoPlay();
+            this.playFlag = true;
+          } else {
+            this.audioPause();
+            this.playFlag = false;
+          }
+
+          //text.innerHTML = e.hidden;
+          if (e.hidden) {  // 网页被挂起
+            this.audioAutoPlay();
+            this.playFlag = true;
+          } else { // 网页被呼起
+            this.audioPause();
+            this.playFlag = false;
+          }
+        } else { // 未点击关闭音乐按钮
+          if (this.playFlag) {
+            this.audioPause();
+            this.playFlag = false;
+          } else {
+            this.audioAutoPlay();
+            this.playFlag = true;
+          }
+
+          //text.innerHTML = e.hidden;
+          if (e.hidden) {  // 网页被挂起
+            this.audioPause();
+            this.playFlag = false;
+          } else { // 网页被呼起
+            this.audioAutoPlay();
+            this.playFlag = true;
+          }
+        }
+      });
+    },
+
+    methods: {
+      audioPlayOrPause() {
+        this.clickMusicBtn = !this.clickMusicBtn;
+        if (this.playFlag) {
+          this.audioPause();
+          this.playFlag = false;
+        } else {
+          this.audioAutoPlay();
+          this.playFlag = true;
+        }
+      },
+      audioPause() {
+        let audio = this.$refs.audio
+        audio.pause();
+        document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.pause();
+        }, false);
+      },
+      audioAutoPlay() {
+        let audio = this.$refs.audio
+        audio.play();
+        document.addEventListener("WeixinJSBridgeReady", function () {
+          audio.play();
+        }, false);
+      },
+    },
+}
+*/

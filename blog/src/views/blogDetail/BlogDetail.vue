@@ -5,9 +5,9 @@
             :probe-type="3"
             @scroll="contentScroll"
             :pull-up-load="true">
-      <div class="detail">
+      <div class="detail" ref="detail">
         <div class="top">
-          <div class="link" @click="linkClick">博客</div>
+          <div class="link" @click="linkClick">{{ article.kind }}</div>
           <div>&nbsp;&nbsp;>&nbsp;&nbsp;</div>
           <div>{{article.title}}</div>
         </div>
@@ -30,13 +30,15 @@
                         ref="showComment"/>
           <write-comment v-if="article.title"
                          :article="article.title"
+                         :articleId="articleId"
                          @send="reloadDate"/>
         </div>
       </div>
-
       <floor class="floor"/>
     </scroll>
 
+    <back-top v-show="isShowBackTop"
+      @click.native="backClick"/>
   </div>
 </template>
 
@@ -76,7 +78,6 @@
       }
     },
     created() {
-
       //页面加载时,如果vuex中指定值为空则更新vuex
       if (sessionStorage.getItem("articleId") && this.articleId == null) {
         this.$store.dispatch('addCurrentArticle', sessionStorage.getItem("articleId"))
@@ -129,6 +130,8 @@
   .blog-detail {
     position: relative;
     height: 100vh;
+    background-color: #fff;
+    background-image: none;
   }
 
   .scroll {
@@ -147,13 +150,15 @@
 
   .detail:before{
     position: absolute;
+    background-image: url('../../assets/img/BlogDetail/几何元素背景.jpg');
+    background-size:contain;/*
+    background-image: url("~assets/img/BlogDetail/雪压梅花枝.png");*/
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
     content: '';
-    background-image: url("~assets/img/BlogDetail/1111.jpg");
-    opacity: .5;
+    opacity: .2;
     z-index: -1;
   }
 

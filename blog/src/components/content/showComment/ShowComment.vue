@@ -14,8 +14,8 @@
           </div>
         </div>
         <div class="comment-show-right">
-          <div class="comment-show-time">{{item.commentTime | dataStringToDate}}</div><!--
-            <div class="comment-show-reply">回复</div>-->
+          <div class="comment-show-time">{{item.commentTime | dataStringToDate}}</div>
+          <div v-show="isAdmin" class="comment-show-reply">回复</div>
         </div>
       </div>
       <div class="page">
@@ -41,7 +41,11 @@
   export default {
     name: "ShowComment",
     props: {
-      article: ''
+      article: '',
+      isAdmin: {
+        type: String,
+        default: false
+      }
     },
     data() {
       return {

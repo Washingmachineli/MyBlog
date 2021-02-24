@@ -10,7 +10,7 @@
           {{item}}
           <nav-bar-item :small-title="menu[item]"
                         v-show="isShow && currentShow === index"
-                        @labelClick="labelClick"
+                        @kindClick="kindClick"
                         :link="itemLink"
                         :index="index"/>
         </span>
@@ -39,16 +39,20 @@
     },
     data() {
       return {
-        currentIndex: 0,
+        currentIndex: -1,
         currentShow: 0,
         isShow:false,
       }
     },
-    mounted() {
-      let _this = this;
+    created() {
+      this.$bus.$on('viewLoad', this.refreshLink)
+
+
+      /*let _this = this;
+      alert(_this.link.findIndex(index => index == _this.$route.path))
       setTimeout(function() {
         _this.currentIndex = _this.link.findIndex(index => index == _this.$route.path)
-      }, 500);
+      }, 500);*/
     },
     computed: {
       itemLink() {
@@ -73,9 +77,16 @@
           }
         }
       },
-      labelClick(index) {
+      kindClick(index) {
         this.isShow = false
         this.currentIndex = index
+      },
+      refreshLink() {
+        let _this = this;
+        this.$router.onReady(() => {
+          this.currentIndex = _this.link.findIndex(index => index == _this.$route.path)
+          if(_this.$route.path === '/blogDetail') this.currentIndex = 1
+        });
       }
     }
   }
@@ -92,9 +103,24 @@
     padding: 10px 0;
     display: flex;
     z-index: 5;
-    background-color: #fff;
-    opacity: .9;
+    opacity: 1;
     box-shadow: 2px 0 2px #888888;
+
+
+  }
+
+  .nav-bar:after{
+    position: absolute;
+    background-image: url('~assets/img/home/浅绿.jpg');
+    background-position: 0 0; /*
+    background-image: url("~assets/img/BlogDetail/雪压梅花枝.png");*/
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    content: '';
+    opacity: .6;
+    z-index: -1;
   }
 
   .title {
@@ -122,7 +148,8 @@
   }
 
   .isActive {
-    border-bottom: 2px solid #46bd87;
+    font-weight: bold;
+    border-bottom: 4px solid #46bd87;
   }
 
   .clickActive {

@@ -10,6 +10,7 @@ Vue.use(Vuex)
 const state = {
   articleId: null,
   articleKind: null,
+  token: null,
 }
 
 const store = new Vuex.Store({

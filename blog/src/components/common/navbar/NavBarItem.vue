@@ -50,7 +50,7 @@
       },
       itemClick(item, index) {
         //点击后，下拉窗消失
-        this.$emit("labelClick", this.index)
+        this.$emit("kindClick", this.index)
         this.currentIndex = index
 
         //将选中的分类存到store

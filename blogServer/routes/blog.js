@@ -13,6 +13,14 @@ router.post('/findArticle', function(req, res, next) {
   })
 });
 
+//获取文章分类
+router.get('/articleKind', function(req, res, next) {
+
+  article.articleKind(data => {
+    res.send(data);
+  })
+});
+
 //获取当前分类下的所有文章
 router.post('/getArticleByKind', function(req, res, next) {
   let params = req.body;

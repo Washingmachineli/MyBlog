@@ -1,8 +1,8 @@
 <template>
-  <div id="article-info" v-if="Object.keys(articleInfo).length !== 0">
+  <div class="article-info" id="article-info" v-if="Object.keys(articleInfo).length !== 0">
     <div class="item" v-for="item in articleInfo">
       <div class="picture">
-        <img :src="item.picture" @load="pictureLoad"/>
+        <img v-lazy="item.picture" @load="pictureLoad"/>
       </div>
       <div class="info">
         <div class="title" @click="titleClick(item.id)">{{item.title}}</div>
@@ -39,8 +39,16 @@
     methods: {
       //图片加载好后，将高度发送给父组件
       pictureLoad() {
+
         let article = document.getElementById('article-info')
-        debounce(this.$emit('articleLoad', window.getComputedStyle(article).height), 100);
+ /*       debounce(this.$emit('articleLoad', window.getComputedStyle(article).height), 100);
+*/
+        const heightSend = debounce(() => {
+          this.$emit('articleLoad', window.getComputedStyle(article).height)
+        },500)
+
+        heightSend()
+
       },
       titleClick(id) {//{name:'/blogDetail'}, params:{'参数':'参数Value'}
         this.$store.dispatch('addCurrentArticle', id)
@@ -70,6 +78,7 @@
     src: url('~assets/font/濑户字体.ttf'); /* IE9+ */
   }
 
+
   .item {
     width: 100%;
     height: 100%;
@@ -79,7 +88,7 @@
     display: flex;
     box-shadow: 3px 5px 5px #888888;
     color:black;
-    border: 1px solid #888888;
+    background-color: #fff;
   }
 
   .picture {

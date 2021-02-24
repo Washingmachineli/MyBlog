@@ -4,5 +4,8 @@ export default {
   },
   articleKind(state) {
     return state.articleKind
+  },
+  token(state) {
+    return state.token
   }
 }

@@ -4,19 +4,20 @@
             ref="scroll"
             :probe-type="3"
             @scroll="contentScroll"
-            :pullUpLoad="true"
             @pullingUp="pullingUp"
             :pull-up-load="true">
       <div class="banner">
         <beat-text class="text" :message="message" :setTime="parseInt('150')"/>
       </div>
       <div id="content" class="content-article">
-        <article-info class="article-info" :article-info="articleInfo" :label-info="labelInfo" @articleLoad="articleLoad"/>
-        <label-show class="label-show" :label-info="labelInfo"/>
+        <article-info class="article-info" :article-info="articleInfo"  @articleLoad="articleLoad"/>
+        <kind-show class="kind-show" :kind-info="kindInfo"/>
+        <last-comment class="last-comment" :comment-info="lastComment"/>
       </div>
       <floor class="floor"/>
     </scroll>
-
+    <back-top v-show="isShowBackTop"
+              @click.native="backClick"/>
     <time-clock class="time-clock"/>
   </div>
 </template>
@@ -24,11 +25,14 @@
 <script>
   import BeatText from "../../components/common/beatText/BeatText";
   import ArticleInfo from "../../components/content/articleInfo/ArticleInfo";
-  import LabelShow from "../../components/content/labelShow/LabelShow";
+  import KindShow from "../../components/content/kindShow/KindShow";
   import TimeClock from "@/components/common/tImeClock/TimeClock";
+  import LastComment from "@/components/content/lastComment/LastComment";
 
 
   import {articleListMixin, scrollSet, showBackTop} from "../../common/mixin";
+  import {getComment} from "@/network/blog";
+  import {debounce} from "@/common/utils";
 
   export default {
     name: "Home",
@@ -36,19 +40,36 @@
     components: {
       BeatText,
       ArticleInfo,
-      LabelShow,
-      TimeClock
+      KindShow,
+      TimeClock,
+      LastComment
     },
     data() {
       return {
         message: '既然我已经踏上这条道路，那么，任何东西都不应妨碍我沿着这条路走下去。',
+        page: 0,
+        lastComment: {},
       }
     },
     methods: {
       pullingUp() {
-        this._getArticleInfo()
-      }
-    }
+
+
+        const article = debounce(() => {
+          this._getArticleInfo()
+          this.$refs.scroll.finishPullUp()
+        },500)
+
+        article()
+      },
+    },
+    created() {
+
+      getComment(null, this.page).then( res => {
+        this.lastComment = res.data
+      })
+
+    },
   }
 </script>
 
@@ -81,7 +102,8 @@
     background-image: url('~assets/img/home/banner1.jpg') ;
     background-size: cover;
     background-repeat: no-repeat;
-    display: table;overflow:hidden;
+    display: table;
+    overflow:hidden;
   }
 
   .banner .text {
@@ -110,11 +132,24 @@
     width: 65%;
   }
 
-  .label-show {
+  .kind-show {
     display: inline-block;
     position: absolute;
     top: 20px;
-    right: 10%;
-    width: 25%;
+    right: 5%;
+    width: 30%;
+  }
+
+  .last-comment {
+    position: absolute;
+    top: 420px;
+    right: 5%;
+    width: 30%;
+  }
+
+  .time-clock {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
   }
 </style>

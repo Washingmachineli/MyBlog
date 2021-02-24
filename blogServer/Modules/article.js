@@ -2,7 +2,8 @@ let db = require('../MongoDB/connectDB')
 let mongoose = require('mongoose')
 let ObjectID = require('mongodb').ObjectID;
 
-exports.ArticleInfo = function(params, callback) {/*
+exports.ArticleInfo = function(params, callback) {
+  /*
   db.find("Article",{},function(err, result){
 
     if(err){
@@ -110,6 +111,7 @@ exports.findArticle = function(params, callback) {
         res[result[i].title] = {
           id: result[i]._id,
           author: result[i].author,
+          kind: result[i].kind,
           describe: result[i].describe,
           label: result[i].label,
           content: result[i].content,
@@ -128,7 +130,42 @@ exports.findArticle = function(params, callback) {
 
 //获取指定分类下的文章
 exports.getArticleByKind = function(params, callback) {
-  db.find("Article",{'kind': params.kind},function(err, result){
+ /* db.getAllCount("Article", {'kind': params.kind}, function (err, result) {
+
+    if (err) {
+      return callback("-3")//服务器错误
+    } else {
+      let length = result;
+      db.find("Article",{'kind': params.kind}, {sort:{'createTime': -1}, page: params.page, pageamount: 5},function(err, result){
+
+        if(err){
+          return callback("-3")//服务器错误
+        }
+        if(result.length == 0){
+          return callback("-1")//查无
+        }
+        else{
+          let res = []
+          let i = 0
+          while (result[i])
+          {
+            res['data'][i] = {
+              id: result[i]._id,
+              title: result[i].title,
+              author: result[i].author,
+              describe: result[i].describe,
+              label: result[i].label,
+              picture: result[i].picture,
+              createTime: result[i].createTime,
+            }
+            i++
+          }
+          return callback(res)
+        }
+      })
+    }
+  })*/
+  db.find("Article",{'kind': params.kind}, {sort:{'createTime': -1}, page: params.page, pageamount: 5},function(err, result){
 
     if(err){
       return callback("-3")//服务器错误
@@ -137,12 +174,13 @@ exports.getArticleByKind = function(params, callback) {
       return callback("-1")//查无
     }
     else{
-      let res = {}
+      let res = []
       let i = 0
       while (result[i])
       {
-        res[result[i].title] = {
+        res[i] = {
           id: result[i]._id,
+          title: result[i].title,
           author: result[i].author,
           describe: result[i].describe,
           label: result[i].label,
@@ -154,6 +192,7 @@ exports.getArticleByKind = function(params, callback) {
       return callback(res)
     }
   })
+
 }
 
 
@@ -229,7 +268,7 @@ exports.getArticleByLabel = function(params, callback) {
   if(params.label !== null) {
     json = {'kind': params.kind, 'label': params.label}
   }
-  db.find("Article", json,function(err, result){
+  db.find("Article", json, {sort:{'createTime': -1}, page: params.page, pageamount: 5}, function(err, result){
 
     if(err){
       return callback("-3")//服务器错误
@@ -238,11 +277,12 @@ exports.getArticleByLabel = function(params, callback) {
       return callback("-1")//查无
     }
     else{
-      let res = {}
+      let res = []
       let i = 0
       while (result[i]){
-        res[result[i].title] = {
+        res[i] = {
           id: result[i]._id,
+          title: result[i].title,
           author: result[i].author,
           describe: result[i].describe,
           label: result[i].label,

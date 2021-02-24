@@ -35,6 +35,7 @@ export default {
   },
   props: {
     article: '',
+    articleId: '',
   },
   data() {
     return {
@@ -56,7 +57,7 @@ export default {
         this.$toast.show('昵称不能为空！', 3000)
       }
       else {
-        addComment(name, this.article, this.$refs.editor.getValue()).then( res => {
+        addComment(name, this.article, this.articleId, this.$refs.editor.getValue()).then( res => {
           this.$refs.editor.clear()
           this.$emit('send')
         })
@@ -150,17 +151,19 @@ export default {
     float: right;
     margin-left: 10px;
     display: inline-block;
-    padding: 5px 5px;
+    padding: 5px 25px;
     background-color: #48AA71;
     box-shadow: 0 4px 6px rgb(50 50 93 / 11%), 0 1px 3px rgb(0 0 0 / 8%);
   }
 
   .comment-button span:hover{
     background-color: #458F64;
-    -webkit-transform:translateY(-1px);
-    -moz-transform:translateY(-1px);
-    -ms-transform:translateY(-1px);
-    -o-transform:translateY(-1px);
-    transform:translateY(-1px);
+
+    -webkit-transform:translateY(1px);
+    -moz-transform:translateY(1px);
+    -ms-transform:translateY(1px);
+    -o-transform:translateY(1px);
+    transform:translateY(1px);
   }
+
 </style>
