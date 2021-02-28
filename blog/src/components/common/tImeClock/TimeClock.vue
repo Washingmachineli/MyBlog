@@ -26,7 +26,7 @@
 
       this.initCanvas()
       this.clockImage = new Image();
-      this.clockImage.src = 'https://static.runoob.com/images/mix/125855_nnla_89964.png';
+      this.clockImage.src = require('@/assets/img/timeClock/clock.png');
 
       setInterval(this.drawScene, 100); // loop drawScene
 
