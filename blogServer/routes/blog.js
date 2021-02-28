@@ -1,7 +1,6 @@
 let express = require('express');
 let router = express.Router();
 let article = require('../Modules/article')
-let label = require('../Modules/label')
 let comment = require('../Modules/comment')
 
 

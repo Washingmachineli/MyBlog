@@ -11,6 +11,7 @@ const state = {
   articleId: null,
   articleKind: null,
   token: null,
+  isLogin: false,
 }
 
 const store = new Vuex.Store({

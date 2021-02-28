@@ -34,4 +34,5 @@ router.get('/getArticleKind', function(req, res) {
   })
 });
 
+
 module.exports = router;

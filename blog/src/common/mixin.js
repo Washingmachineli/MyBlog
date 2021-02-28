@@ -172,6 +172,9 @@ export const scrollSet = {
     },
     articleLoad() {
       this.$refs.scroll.refresh();
+    },
+    scrollCenter() {
+      this.$refs.scroll.scrollTo(0, this.$refs.scroll.$data.scroll.maxScrollY / 2, 300)
     }
   }
 
@@ -179,22 +182,31 @@ export const scrollSet = {
 
 //检查是否登录
 export const checkLogin = {
-  inject:  ['reload', 'signIn', 'signOut'],
+  inject:  ['reload'],
+  computed: {
+    ...mapGetters(['token', 'isLogin']),
+  },
   created() {
-    checkToken(this.token).then( res => {
-      console.log(res)
+    let t = null
+    if(this.token === null)
+    {
+      t = sessionStorage.getItem('token')
+    }
+    else {
+      t = this.token
+    }
+
+    checkToken(t).then( res => {
       if(res.state === 0) {
-        sessionStorage.removeItem('token');
-        this.signOut()
-        this.$router.replace('/login').catch(err=>err)
+        sessionStorage.removeItem("token");
+        this.$store.dispatch('clearToken')
+        this.$store.dispatch('signOut')
+        this.reload()
       }
       else {
-        this.signIn()
+        this.$store.dispatch('signIn')
       }
     })
-  },
-  computed: {
-    ...mapGetters(['token']),
   },
 }
 

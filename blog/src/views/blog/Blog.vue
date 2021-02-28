@@ -37,13 +37,13 @@
   import ArticleInfo from "../../components/content/articleInfo/ArticleInfo";
 
   import {getArticleByLabel} from "../../network/blog";
-  import {articleListByKindMixin, randomColorMixin, scrollSet, showBackTop} from "../../common/mixin";
+  import {articleListByKindMixin, checkLogin, randomColorMixin, scrollSet, showBackTop} from "../../common/mixin";
   import {debounce} from "@/common/utils";
 
 
   export default {
     name: "Blog",
-    mixins: [articleListByKindMixin, randomColorMixin, scrollSet, showBackTop],
+    mixins: [articleListByKindMixin, randomColorMixin, scrollSet, showBackTop, checkLogin],
     components: {
       ArticleInfo,
     },

@@ -105,7 +105,7 @@
 
   import ShowCart from "@/components/common/showCart/ShowCart";
 
-  import {scrollSet} from "@/common/mixin";
+  import {checkLogin, scrollSet} from "@/common/mixin";
   /*import {musicSet} from "@/common/mixin";*/
 
   export default {
@@ -113,7 +113,7 @@
     components: {
       ShowCart
     },
-    mixins: [scrollSet],
+    mixins: [scrollSet, checkLogin],
     data() {
       return {
         showCartHeight: []

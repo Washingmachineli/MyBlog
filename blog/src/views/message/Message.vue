@@ -12,8 +12,11 @@
         <show-comment :article="title"
                       :key="keys"
                       id="showComment"
-                      ref="showComment"/>
-        <write-comment :article="title"
+                      ref="showComment"
+                      :is-admin="isLogin"
+                      @scrollCenter="scrollCenter"/>
+        <write-comment v-if="!isLogin"
+                       :article="title"
                        @send="reloadDate"/>
       </div>
 
@@ -26,7 +29,7 @@
 
 <script>
 
-import {scrollSet, showBackTop} from "@/common/mixin";
+import {checkLogin, scrollSet, showBackTop} from "@/common/mixin";
   import ShowComment from "@/components/content/showComment/ShowComment";
   import WriteComment from "@/components/content/writeComment/WriteComment";
 
@@ -36,7 +39,7 @@ import {scrollSet, showBackTop} from "@/common/mixin";
       WriteComment,
       ShowComment
     },
-    mixins: [scrollSet, showBackTop],
+    mixins: [scrollSet, showBackTop, checkLogin],
     data() {
       return {
         title: '留言板',

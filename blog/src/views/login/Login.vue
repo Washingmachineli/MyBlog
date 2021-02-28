@@ -81,7 +81,8 @@
               this.$emit('loginSuccess')
               this.$store.dispatch('addToken', res.token)
               window.sessionStorage.setItem("token", res.token);
-              this.$router.replace('/adminHome').catch(err=>err);
+              this.$store.dispatch('signIn')
+              this.$router.replace('/home').catch(err=>err);
             }
           })
         }

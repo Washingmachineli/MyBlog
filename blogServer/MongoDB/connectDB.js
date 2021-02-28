@@ -79,12 +79,13 @@ exports.find = function (collectionName, json, C, D) {
 
 //删除
 exports.deleteMany = function (collectionName, json, callback) {
-  _connectDB(function (err, db) {
+  _connectDB(function (err, client) {
+    var db = client.db("Blog")
     //删除
     db.collection(collectionName).deleteMany(json,function (err, results) {
-          callback(err, results);
-          db.close(); //关闭数据库
-        }
+        callback(err, results);
+        client.close(); //关闭数据库
+      }
     );
   });
 };
@@ -99,20 +100,6 @@ exports.updateMany = function (collectionName, json1, json2, callback) {
     });
   });
 };
-
-
-
-/*
-exports.getAllCount = function (collectionName,json,callback) {
-  _connectDB(function (err, db) {
-    db.collection(collectionName).find(json).count({}).then(function(count) {
-      callback(count);
-      db.close();
-    });
-  })
-};
-*/
-
 
 //查找不重复的值
 exports.distinct = function (collectionName, json, callback) {

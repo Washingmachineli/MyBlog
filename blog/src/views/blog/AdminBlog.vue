@@ -1,35 +1,12 @@
 <template>
-  <div class="blog">
-    <scroll class="scroll"
-            ref="scroll"
-            :probe-type="3"
-            @scroll="contentScroll"
-            @pullingUp="pullingUp"
-            :pull-up-load="true">
+  <div class="blog">qqq
+    <!--<dialog>
 
-      <div class="banner">
-        <div>{{articleKind}}</div>
+      <div slot="header">插入到name为header的slot标签里面</div>
+      <div class="dialog_publish_main" slot="main">
+        这里是内容插入到子组件的slot的name为main里面，可以在父组件中添加class定义样式，事件类型等各种操作
       </div>
-
-      <div class="label-show">
-        <p class="show-info">分类：</p>
-        <span class="label"
-              :class='{isActive: allShow === currentIndex}'
-              @click="labelClick('all', -1)">全部</span>
-        <span class="label"
-              v-for="(item, index) in labelInfo"
-              :class='{isActive: index === currentIndex}'
-              :style="{'background-color': randomColor(item)}"
-              @click="labelClick(item, index)">{{item}}</span>
-      </div>
-
-      <div class="article-list" id="content">
-        <article-info :article-info="articleInfo" :label-info="labelInfo" @articleLoad="articleLoad"/>
-      </div>
-      <floor class="floor"/>
-    </scroll>
-    <back-top v-show="isShowBackTop"
-              @click.native="backClick"/>
+    </dialog>-->
   </div>
 </template>
 

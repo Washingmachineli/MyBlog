@@ -30,13 +30,13 @@
   import LastComment from "@/components/content/lastComment/LastComment";
 
 
-  import {articleListMixin, scrollSet, showBackTop} from "../../common/mixin";
+  import {articleListMixin, scrollSet, showBackTop, checkLogin} from "../../common/mixin";
   import {getComment} from "@/network/blog";
   import {debounce} from "@/common/utils";
 
   export default {
     name: "Home",
-    mixins: [articleListMixin, scrollSet, showBackTop],
+    mixins: [articleListMixin, scrollSet, showBackTop, checkLogin],
     components: {
       BeatText,
       ArticleInfo,
@@ -62,6 +62,11 @@
 
         article()
       },
+      signout() {
+        sessionStorage.removeItem('token');
+
+        this.$store.dispatch('signOut')
+      }
     },
     created() {
 

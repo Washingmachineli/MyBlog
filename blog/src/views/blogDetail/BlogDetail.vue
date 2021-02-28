@@ -48,7 +48,7 @@
   import WriteComment from "@/components/content/writeComment/WriteComment";
 
   import { mapGetters } from 'vuex'
-  import {randomColorMixin, showBackTop, scrollSet} from "../../common/mixin";
+  import {randomColorMixin, showBackTop, scrollSet, checkLogin} from "../../common/mixin";
   import {findArticle} from "../../network/home";
 
   export default {
@@ -58,7 +58,7 @@
       ShowComment,
       WriteComment,
     },
-    mixins: [randomColorMixin, showBackTop, scrollSet],
+    mixins: [randomColorMixin, showBackTop, scrollSet, checkLogin],
     computed: {
       ...mapGetters(['articleId']),
       ShowCommentHeight() {

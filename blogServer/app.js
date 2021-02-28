@@ -7,7 +7,8 @@ var ejs = require('ejs')
 
 var indexRouter = require('./routes');
 var homeRouter = require('./routes/home');
-var blogRouter = require('./routes/blog.js');
+var blogRouter = require('./routes/blog');
+var commentRouter = require('./routes/comment');
 
 var app = express();
 
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/home', homeRouter);
 app.use('/blog', blogRouter);
+app.use('/comment', commentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

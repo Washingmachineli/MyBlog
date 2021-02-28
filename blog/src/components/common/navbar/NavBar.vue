@@ -5,7 +5,7 @@
       <div class="content">
         <span v-for="(item, index) in Object.keys(menu)"
               :key="index"
-              :class="{isActive: (currentIndex === index)}"
+              :class="{isActive: (currentIndex === index), contentSpan: true}"
               @click="itemClick(item, index)">
           {{item}}
           <nav-bar-item :small-title="menu[item]"
@@ -14,13 +14,28 @@
                         :link="itemLink"
                         :index="index"/>
         </span>
+        <span class="signOut" v-if="signOutButton">
+          <img src="~assets/img/common/signOut1.png"
+                                   @click="signOut">
+        </span>
       </div>
     </div>
+    <dialog-message :is-show="dialogShow"
+                    :wid-num="30"
+                    :left-site="35"
+                    :dialog-kind="2"
+                    @dialogClose="dialogClose"
+                    @chooseYes="chooseYes"
+                    @chooseNo="chooseNo">
+      <div slot="header">提醒</div>
+      <div slot="main">确认退出该账户吗？</div>
+    </dialog-message>
   </div>
 </template>
 
 <script>
   import NavBarItem from "./NavBarItem";
+  import DialogMessage from "@/components/common/dialogMessage/DialogMessage";
 
   export default {
     name: "NavBar",
@@ -32,16 +47,22 @@
       link: {
         type: Array,
         default: []
+      },
+      signOutButton: {
+        type: Boolean,
+        default: false
       }
     },
     components: {
+      DialogMessage,
       NavBarItem
     },
     data() {
       return {
         currentIndex: -1,
         currentShow: 0,
-        isShow:false,
+        isShow: false,
+        dialogShow: false
       }
     },
     created() {
@@ -81,12 +102,33 @@
         this.isShow = false
         this.currentIndex = index
       },
+      //判断当前是在哪个页面
       refreshLink() {
         let _this = this;
         this.$router.onReady(() => {
           this.currentIndex = _this.link.findIndex(index => index == _this.$route.path)
-          if(_this.$route.path === '/blogDetail') this.currentIndex = 1
+          if(_this.$route.path === '/blogDetail') this.currentIndex = this.link.indexOf('/blog')
+          /*console.log(this.islogin)
+          console.log(this.link.indexOf('/blog'))*/
         });
+      },
+      signOut() {
+        this.dialogShow = true
+      },
+      dialogClose() {
+        this.dialogShow = false
+      },
+      chooseYes() {
+        this.dialogShow = false
+        this.$emit('dialogChooseYes')
+      },
+      chooseNo() {
+        this.dialogShow = false
+      },
+    },
+    watch: {
+      link() {
+        this.refreshLink()
       }
     }
   }
@@ -139,7 +181,7 @@
     z-index: 10;
   }
 
-  .content span{
+  .contentSpan{
     display: inline-block;
     margin: 0 10px;
     font-size: 20px;
@@ -154,5 +196,20 @@
 
   .clickActive {
     color: #46bd87!important;
+  }
+
+  .signOut {
+    display: inline-block;
+    margin: 0 10px;
+    height: 45px;
+    align-items: center;
+    vertical-align: middle;
+  }
+
+  .signOut img{
+    vertical-align: middle;
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
   }
 </style>

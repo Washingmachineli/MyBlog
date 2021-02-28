@@ -1,3 +1,6 @@
 export const CHANGE_ARTICLE_ID = 'change_article_id'
 export const CHANGE_ARTICLE_KIND = 'change_article_kind'
 export const ADD_TOKEN = 'add_token'
+export const CLEAR_TOKEN = 'clear_token'
+export const SIGN_IN = 'sign_in'
+export const SIGN_OUT = 'sign_out'

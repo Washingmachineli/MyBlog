@@ -18,7 +18,7 @@
     <nav-bar class="home-nav" :menu="menu" :link="link" v-if="!isLogin">
       <div class="title" slot="title"><i>Ela's Blog</i></div>
     </nav-bar>
-    <nav-bar class="home-nav" :menu="adminMenu" :link="adminLink" v-else-if="isLogin">
+    <nav-bar class="home-nav" :menu="adminMenu" :link="adminLink" v-else-if="isLogin"  :sign-out-button="isLogin" @dialogChooseYes="confirmSignOut">
       <div class="title" slot="title"><i>Ela's Blog</i></div>
     </nav-bar>
     <nav-bar class="home-nav" :menu="{}" :link="[]" v-else>
@@ -42,6 +42,7 @@
   import Scroll from "@/components/common/scroll/Scroll";
 
   import {getArticleKind} from "./network/app";
+  import { mapGetters } from 'vuex'
 
   export default {
     name: "App",
@@ -53,15 +54,14 @@
     //刷新vue-router
     provide (){
       return {
-        reload:this.reload,
+        reload:this.reload,/*
         signIn: this.signIn,
-        signOut: this.signOut,
+        signOut: this.signOut,*/
       }
     },
     data() {
       return {
         isReady: false,
-        isLogin: false,
         menu: {
           '主页': [],
           '博客': [],
@@ -74,16 +74,31 @@
           '/message',
           '/other'
         ],
-        adminMenu: {},
-        adminLink: [],
+        adminMenu: {
+          '主页': [],
+          '写博客': [],
+          '博客': [],
+          '留言': [],
+          '其他': [],
+        },
+        adminLink: [
+          '/home',
+          '/writeBlog',
+          '/blog',
+          '/message',
+          '/other'
+        ],
         isRouterAlive:true,
       }
+    },
+    computed: {
+      ...mapGetters(['isLogin']),
     },
     created() {
       getArticleKind().then( data => {
         this.menu['博客'].push(...data)
+        this.adminMenu['博客'].push(...data)
       })
-
 
     },
     methods: {
@@ -94,7 +109,13 @@
           this.isRouterAlive = true
         })
       },
-      signIn() {
+      confirmSignOut() {
+        sessionStorage.removeItem("token");
+        this.$store.dispatch('clearToken')
+        this.$store.dispatch('signOut')
+        this.reload()
+      }
+      /*signIn() {
         this.adminMenu = {
           '主页': [],
           '写博客': [],
@@ -103,11 +124,11 @@
           '其他': [],
         }
         this.adminLink = [
-          '/adminHome',
-          '/adminWriteBlog',
-          '/adminBlog',
-          '/adminMessage',
-          '/adminOther'
+          '/home',
+          '/writeBlog',
+          '/blog',
+          '/message',
+          '/other'
         ]
         getArticleKind().then( data => {
           this.adminMenu['博客'].push(...data)
@@ -116,7 +137,7 @@
       },
       signOut() {
         this.isLogin = false
-      }
+      }*/
     },
     mounted() {
       this.isReady = true

@@ -8,6 +8,8 @@ const Message = () => import('views/message/Message')
 const Other = () => import('views/other/Other')
 const Login = () => import('views/login/Login')
 
+const Test = () => import('views/test/Test')
+
 
 const AdminHome = () => import('views/home/AdminHome')
 const AdminBlog = () => import('views/blog/AdminBlog')
@@ -77,6 +79,10 @@ const routes = [
     path: '/adminOther',
     component: AdminOther
   },
+  {
+    path: '/test',
+    component: Test
+  },
 ]
 
 
@@ -84,7 +90,7 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 })
-
+/*
 // 导航守卫
 // 使用 router.beforeEach 注册一个全局前置守卫，判断用户是否登陆
 router.beforeEach((to, from, next) => {
@@ -101,6 +107,6 @@ router.beforeEach((to, from, next) => {
       next();
     }
   }
-});
+});*/
 
 export default router
