@@ -56,9 +56,17 @@
         //将选中的分类存到store
         this.$store.dispatch('changeArticleKind', item)
 
+
+        //发送已经文章分类已经更改
+        this.$bus.$emit('articleKindChanged')
+
+
         //跳转
         const path = this.link
         //catch(err=>err)防止多次点击同一路由地址产生报错
+
+
+
         this.$router.replace(path).catch(err=>err);
         /*
         if(this.$route.path !== path) {

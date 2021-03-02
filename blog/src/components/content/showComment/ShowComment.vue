@@ -4,7 +4,7 @@
       全部评论
     </div>
     <div v-if="Object.keys(comments).length !== 0">
-      <div class="commentShow" :class="{isReply: (item == currentReply)}" v-for="item in comments" >
+      <div class="commentShow" :class="{isReply: (item == currentReply)}" v-for="item in comments" :ref="item.id">
         <div class="comment-show-left">
           <img src="~assets/img/BlogDetail/comment-user.png"/>
         </div>
@@ -58,8 +58,9 @@
     </div>
     <dialog-message ref="message"
                     :is-show="dialogShow"
-                    :wid-num="30"
-                    :left-site="35"
+                    wid-num="30%"
+                    left-site="35%"
+                    :top-distance="topDistance"
                     :dialog-kind="2"
                     @dialogClose="dialogClose"
                     @chooseYes="chooseYes"
@@ -111,6 +112,7 @@
         dialogShow: false,
         currentId: null,
         currentDelete: null,
+        topDistance: '35%',
       }
     },
     created() {
@@ -131,6 +133,11 @@
           this.commentPage = res.count % 5 == 0 ?  (res.count / 5 ) : (Math.floor(res.count / 5)+1)
           this.pageSet(this.currentPage)
         })
+      },
+      refresh() {
+        this.currentReply = null
+        this.currentPage  = this.currentPage - 1
+        this.comment()
       },
       pageSet(page) {
 
@@ -188,24 +195,25 @@
         replyComment(id, reply).then( res => {
           if(res.state == '1') {
             this.$toast.show('评论成功！', 3000)
-            this.reload()
+            this.refresh()
           }
           else {
             this.$toast.show(' 评论失败！', 3000)
+            this.refresh()
           }
         })
       },
       commentDelete(id) {
+        this.topDistance = this.$refs[id][0].offsetTop + 'px'
         this.currentId = id
         this.currentDelete = 'comment'
         this.dialogShow = true
-        this.$emit('scrollCenter')
       },
       replyDeleted(id) {
+        this.topDistance = this.$refs[id][0].offsetTop + 'px'
         this.currentId = id
         this.currentDelete = 'reply'
         this.dialogShow = true
-        this.$emit('scrollCenter')
       },
       // 清空内容
       clear() {
@@ -220,10 +228,11 @@
           replyDelete(this.currentId).then( res => {
             if(res.state === '1') {
               this.$toast.show('删除评论成功！', 3000)
-              this.$router.go(0)
+              this.refresh()
             }
             else {
               this.$toast.show('删除评论失败！', 3000)
+              this.refresh()
             }
           })
         }
@@ -231,10 +240,11 @@
           commentDelete(this.currentId).then( res => {
             if(res.state === '1') {
               this.$toast.show('删除评论成功！', 3000)
-              this.$router.go(0)
+              this.refresh()
             }
             else {
               this.$toast.show('删除评论失败！', 3000)
+              this.refresh()
             }
           })
         }

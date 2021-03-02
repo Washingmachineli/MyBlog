@@ -1,6 +1,7 @@
 //根据指定标签查找相应文章的信息
 import {request} from "./request";
 
+//获取标签
 export function getArticleByLabel(kind, label, page) {
   return request({
     method: 'post',
@@ -13,6 +14,7 @@ export function getArticleByLabel(kind, label, page) {
   })
 }
 
+//获取指定分类下的文章
 export function getArticleByKind(kind, page) {
   return request({
     method: 'post',
@@ -24,6 +26,7 @@ export function getArticleByKind(kind, page) {
   })
 }
 
+//获取指定分类下的文章的所有标签
 export function getLabelByKind(data) {
   return request({
     method: 'post',
@@ -34,6 +37,7 @@ export function getLabelByKind(data) {
   })
 }
 
+//获取文章分类
 export function articleKind(data) {
   return request({
     method: 'get',
@@ -41,7 +45,7 @@ export function articleKind(data) {
   })
 }
 
-
+//添加评论
 export function addComment(commentator, article, articleId, comment) {
   return request({
     method: 'post',
@@ -55,6 +59,7 @@ export function addComment(commentator, article, articleId, comment) {
   })
 }
 
+//获取评论
 export function getComment(article, page) {
   return request({
     method: 'post',
@@ -63,5 +68,22 @@ export function getComment(article, page) {
       'page': page
     },
     url: '/blog/getComment',
+  })
+}
+
+//修改文章
+export function modifyArticle(id, articleName, articleAuthor, articleKind, articleDescribe, articleLabel, articleContent) {
+  return request({
+    method: 'post',
+    data: {
+      'id': id,
+      'title': articleName,
+      'author': articleAuthor,
+      'kind': articleKind,
+      'describe': articleDescribe,
+      'label': articleLabel,
+      'content': articleContent
+    },
+    url: '/blog/modifyArticle',
   })
 }

@@ -114,6 +114,7 @@
         this.$store.dispatch('clearToken')
         this.$store.dispatch('signOut')
         this.reload()
+        this.$router.replace('/home')
       }
       /*signIn() {
         this.adminMenu = {

@@ -11,13 +11,6 @@ const Login = () => import('views/login/Login')
 const Test = () => import('views/test/Test')
 
 
-const AdminHome = () => import('views/home/AdminHome')
-const AdminBlog = () => import('views/blog/AdminBlog')
-const AdminBlogDetail = () => import('views/blogDetail/AdminBlogDetail')
-const AdminMessage = () => import('views/message/AdminMessage')
-const AdminOther = () => import('views/other/AdminOther')
-
-
 
 /*const originalPush = VueRouter.prototype.push
 //修改原型对象中的push方法
@@ -58,26 +51,6 @@ const routes = [
   {
     path: '/login',
     component: Login
-  },
-  {
-    path: '/adminHome',
-    component: AdminHome
-  },
-  {
-    path: '/adminBlog',
-    component: AdminBlog
-  },
-  {
-    path: '/adminBlogDetail',
-    component: AdminBlogDetail
-  },
-  {
-    path: '/adminMessage',
-    component: AdminMessage
-  },
-  {
-    path: '/adminOther',
-    component: AdminOther
   },
   {
     path: '/test',

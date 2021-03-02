@@ -295,3 +295,32 @@ exports.getArticleByLabel = function(params, callback) {
     }
   })
 }
+
+
+
+//修改文章
+exports.modifyArticle = function(params, callback) {
+  db.find("Article",{'_id': { $ne:ObjectID(params.id)}, 'title': params.title},function(err, result){
+
+    if(err){
+      return callback("-3")//服务器错误
+    }
+    if(result.length == 0){
+      db.updateMany("Article",{'_id': ObjectID(params.id)}, {$set: {'title': params.title, 'author': params.author, 'kind': params.kind,  'describe': params.describe,  'label': params.label,  'content': params.content }},function(err, result){
+        if(err){
+          return callback("-3")//服务器错误
+        }
+        if(result.length == 0){
+          return callback("-1")//查无
+        }
+        else{
+          return callback("1")//修改成功
+        }
+      })
+    }
+    else{
+      return callback("-1")//存在同名文章
+    }
+  })
+
+}

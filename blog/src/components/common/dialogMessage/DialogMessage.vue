@@ -5,12 +5,12 @@
     <!-- transition 这里可以加一些简单的动画效果 -->
     <transition name="drop">
       <!--style 通过props 控制内容的样式  -->
-      <div class="dialog-content" :style="{top:topDistance+'%',width:widNum+'%',left:leftSite+'%'}"  v-if="isShow">
+      <div class="dialog-content" :style="{top:topDistance, width:widNum, left:leftSite}"  v-if="isShow">
         <div class="dialog_head back ">
           <!--弹窗头部 title-->
           <slot name="header">提示信息</slot>
         </div>
-        <div class="dialog_main " :style="{paddingTop:pdt+'px',paddingBottom:pdb+'px'}">
+        <div class="dialog_main " :style="{paddingTop:pdt,paddingBottom:pdb}">
           <!--弹窗的内容-->
           <slot name="main">弹窗内容</slot>
         </div>
@@ -44,28 +44,28 @@ export default {
       required: true
     },
     widNum: {
-      type: Number,
-      default: 86.5
+      type: String,
+      default: '86.5%'
     },
     leftSite: {
       // 左定位
-      type: Number,
-      default: 6.5
+      type: String,
+      default: '6.5%'
     },
     topDistance: {
       //top上边距
-      type: Number,
-      default: 35
+      type: String,
+      default: '35%'
     },
     pdt: {
       //上padding
-      type: Number,
-      default: 22
+      type: String,
+      default: '22px'
     },
     pdb: {
       //下padding
-      type: Number,
-      default: 47
+      type: String,
+      default: '47px'
     },
     dialogKind: {
       //dialog类型 1弹窗只显示消息 2弹窗有选择按钮

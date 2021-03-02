@@ -24,7 +24,7 @@
       </div>
 
       <div class="article-list" id="content">
-        <article-info :article-info="articleInfo" :label-info="labelInfo" @articleLoad="articleLoad"/>
+        <article-info :article-info="articleInfo" :label-info="labelInfo" @articleLoad="articleLoad" />
       </div>
       <floor class="floor"/>
     </scroll>
@@ -36,13 +36,14 @@
 <script>
   import ArticleInfo from "../../components/content/articleInfo/ArticleInfo";
 
-  import {getArticleByLabel} from "../../network/blog";
+  import {getArticleByKind, getArticleByLabel, getLabelByKind} from "../../network/blog";
   import {articleListByKindMixin, checkLogin, randomColorMixin, scrollSet, showBackTop} from "../../common/mixin";
   import {debounce} from "@/common/utils";
 
 
   export default {
     name: "Blog",
+    inject:  ['reload'],
     mixins: [articleListByKindMixin, randomColorMixin, scrollSet, showBackTop, checkLogin],
     components: {
       ArticleInfo,
@@ -52,10 +53,26 @@
         allShow: -1,
         currentIndex: -1,
         currentKind: '散文诗集',
-        labelKind: null
+        labelKind: null,
+        key: 0,
       }
     },
+    created() {
+      this.$bus.$on("articleKindChanged",()=>{
+        this.updateArticleInfo()
+      })
+    },
     methods: {
+
+      //更新所有文章信息,取消异步，同步执行
+      async updateArticleInfo() {
+        this.page = 0
+        await getArticleByKind(this.articleKind, this.page).then( res => {
+          this.articleInfo = res
+          this.page = this.page + 1
+        })
+      },
+
       labelClick(item, index) {
         this.page = 0;
         this.articleInfo = []

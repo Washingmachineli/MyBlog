@@ -60,4 +60,12 @@ router.post('/getComment', function(req, res, next) {
   })
 });
 
+//获取当前文章的评论
+router.post('/modifyArticle', function(req, res, next) {
+  let params = req.body;
+  article.modifyArticle(params,data => {
+    res.send(data);
+  })
+});
+
 module.exports = router

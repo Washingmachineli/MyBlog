@@ -21,8 +21,8 @@
       </div>
     </div>
     <dialog-message :is-show="dialogShow"
-                    :wid-num="30"
-                    :left-site="35"
+                    wid-num="30%"
+                    left-site="35%"
                     :dialog-kind="2"
                     @dialogClose="dialogClose"
                     @chooseYes="chooseYes"

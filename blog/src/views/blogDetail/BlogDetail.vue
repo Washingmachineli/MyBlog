@@ -5,7 +5,7 @@
             :probe-type="3"
             @scroll="contentScroll"
             :pull-up-load="true">
-      <div class="detail" ref="detail">
+      <div class="detail" v-if="!isOperation" ref="detail">
         <div class="top">
           <div class="link" @click="linkClick">{{ article.kind }}</div>
           <div>&nbsp;&nbsp;>&nbsp;&nbsp;</div>
@@ -22,18 +22,25 @@
                    :style="{'background-color': randomColor(item)}">{{item}}</span>
         </div>
         <br/><br/>
+        <div class="article-operation" v-show="isLogin">
+          <div class="article-modify" @click="articleModify()">编辑</div>
+          <div class="article-delete" @click="articleDelete()">删除</div>
+        </div>
+        <br/><br/>
         <div class="comment">
           <show-comment v-if="article.title"
+                        :is-admin="isLogin"
                         :article="article.title"
                         :key="keys"
                         id="showComment"
                         ref="showComment"/>
-          <write-comment v-if="article.title"
+          <write-comment v-if="!isLogin"
                          :article="article.title"
                          :articleId="articleId"
                          @send="reloadDate"/>
         </div>
       </div>
+      <modify-article v-else :article="article" @scrollTop="scrollTop"/>
       <floor class="floor"/>
     </scroll>
 
@@ -46,6 +53,8 @@
 
   import ShowComment from "@/components/content/showComment/ShowComment";
   import WriteComment from "@/components/content/writeComment/WriteComment";
+  import TinymceEditor from "@/components/common/tinymceEditor/TinymceEditor";
+  import ModifyArticle from "@/views/blogDetail/childrenComponent/modifyArticle";
 
   import { mapGetters } from 'vuex'
   import {randomColorMixin, showBackTop, scrollSet, checkLogin} from "../../common/mixin";
@@ -55,6 +64,8 @@
     name: "BlogDetail",
     inject: ['reload'],
     components: {
+      ModifyArticle,
+      TinymceEditor,
       ShowComment,
       WriteComment,
     },
@@ -71,10 +82,8 @@
           type: Object,
           default: {}
         },
-        disabled: false,
-        plugins: '',
-        toolbar: 'undo redo | bold italic forecolor backcolor',
-        keys: 0
+        keys: 0,
+        isOperation: false,
       }
     },
     created() {
@@ -88,26 +97,11 @@
         sessionStorage.setItem("articleId", this.articleId);
       });
 
-      /*//在页面加载时读取sessionStorage里的状态信息
-      if (sessionStorage.getItem("store")) {
-        this.$store.replaceState(
-          Object.assign(
-            {},
-            this.$store.state,
-            JSON.parse(sessionStorage.getItem("store"))
-          )
-        );
-      }
-      //在页面刷新时将vuex里的信息保存到sessionStorage里
-      window.addEventListener("beforeunload", () => {
-        sessionStorage.setItem("store", "");
-        sessionStorage.setItem("store", JSON.stringify(this.$store.state));
-      });*/
-
       findArticle(this.articleId).then( data => {
         this.article = data[Object.keys(data)[0]]
         this.article['title'] = Object.keys(data)[0]
       })
+
     },
     methods: {
       linkClick() {
@@ -120,6 +114,17 @@
       backShowComment(){
         let position = this.$refs.showComment.$el.offsetTop
         this.$refs.scroll.scrollTo(0, -position, 300)
+      },
+      articleModify() {
+        this.isOperation = true
+        this.scrollToTop()
+      },
+      articleDelete() {
+
+      },
+      scrollTop() {
+        this.isOperation = false
+        this.scrollToTop()
       }
     }
   }
@@ -148,7 +153,12 @@
     position:relative;
   }
 
-  .detail:before{
+  .detail-modify {
+    padding: 25px 20%;
+    position:relative;
+  }
+
+  .detail:before, .detail-modify:before{
     position: absolute;
     background-image: url('../../assets/img/BlogDetail/几何元素背景.jpg');
     background-size:contain;/*
@@ -214,6 +224,28 @@
     color: white;
   }
 
+  .article-operation {
+    text-align: center;
+  }
 
+  .article-delete{
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 5px 15px;
+    color: white;
+    border-radius: 5px;
+    line-height: 30px;
+    background-color: #E72500;
+  }
+
+  .article-modify{
+    display: inline-block;
+    padding: 2px 5px;
+    margin: 5px 15px;
+    color: white;
+    border-radius: 5px;
+    line-height: 30px;
+    background-color: #48AA71;
+  }
 
 </style>

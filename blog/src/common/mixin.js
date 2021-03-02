@@ -175,6 +175,9 @@ export const scrollSet = {
     },
     scrollCenter() {
       this.$refs.scroll.scrollTo(0, this.$refs.scroll.$data.scroll.maxScrollY / 2, 300)
+    },
+    scrollToTop() {
+      this.$refs.scroll.scrollTo(0, 0, 300)
     }
   }
 
