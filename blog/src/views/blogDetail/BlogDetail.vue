@@ -14,7 +14,7 @@
         <div class="article">
           <div class="title">{{article.title}}</div>
           <div class="author">{{article.author}}</div>
-          <div class="content">{{article.content}}</div>
+          <div class="content" v-html="article.content"> </div>
         </div>
         <div class="label">
           标签：<span class="label-item"
