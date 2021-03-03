@@ -60,10 +60,18 @@ router.post('/getComment', function(req, res, next) {
   })
 });
 
-//获取当前文章的评论
+//修改文章
 router.post('/modifyArticle', function(req, res, next) {
   let params = req.body;
   article.modifyArticle(params,data => {
+    res.send(data);
+  })
+});
+
+//添加文章
+router.post('/addArticle', function(req, res, next) {
+  let params = req.body;
+  article.addArticle(params,data => {
     res.send(data);
   })
 });

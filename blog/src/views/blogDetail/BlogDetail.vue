@@ -40,7 +40,7 @@
                          @send="reloadDate"/>
         </div>
       </div>
-      <modify-article v-else :article="article" @scrollTop="scrollTop"/>
+      <modify-article v-else :article="article" @scrollTop="scrollTop" @articleChange="articleChange"/>
       <floor class="floor"/>
     </scroll>
 
@@ -125,6 +125,15 @@
       scrollTop() {
         this.isOperation = false
         this.scrollToTop()
+      },
+      //文章修改成功后跳转
+      articleChange() {
+        this.isOperation = false
+        findArticle(this.articleId).then( data => {
+          this.article = data[Object.keys(data)[0]]
+          this.article['title'] = Object.keys(data)[0]
+          this.scrollToTop()
+        })
       }
     }
   }

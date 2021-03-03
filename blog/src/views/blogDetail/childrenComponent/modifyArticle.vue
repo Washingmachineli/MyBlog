@@ -5,13 +5,13 @@
         标题：
       </div>
       <div class="title-table-info">
-        <input class="title-table-name" id="articleName" v-model="articleTitle" type="text"  ref="articleName">
+        <input class="title-table-name" id="articleName" autocomplete="off"  v-model="articleTitle" type="text"  ref="articleName">
       </div><br/><br/>
       <div>
         作者：
       </div>
       <div class="title-table-info">
-        <input class="title-table-author" id="articleAuthor" v-model="articleAuthor" type="text"  ref="articleAuthor">
+        <input class="title-table-author" id="articleAuthor" autocomplete="off"  v-model="articleAuthor" type="text"  ref="articleAuthor">
       </div>
     </div>
     <br/><br/><br/><br/>
@@ -28,7 +28,7 @@
       <div v-if="!isAddLabel" class="add-label" @click="addLabel()">添加标签</div>
       <div v-else class="new-label">
         <div class="title-table-info">
-          <input class="title-table-label"  id="newLabel" placeholder="标签" type="text"  ref="articleAuthor">
+          <input class="title-table-label"  id="newLabel" autocomplete="off"  placeholder="标签" type="text"  ref="articleAuthor">
         </div>
         <div  class="add-label-button" @click="confirmAddLabel()">添加</div>
       </div>
@@ -45,7 +45,7 @@
       </div>
       <div v-else class="new-kind">
         <div class="table-kind-info">
-          <input class="table-kind-content"  id="newKind" placeholder="文章分类" type="text"  ref="articleAuthor">
+          <input class="table-kind-content"  id="newKind" autocomplete="off"  placeholder="文章分类" type="text"  ref="articleAuthor">
         </div>
         <div class="table-kind-button" @click="confirmAddKind()">添加</div>
       </div>
@@ -135,7 +135,13 @@
         let articleDescribe = document.getElementById('articleDescribe').value
         let articleContent = this.$refs.editor.getValue()
         modifyArticle(id, articleName, articleAuthor, articleKind, articleDescribe, articleLabel, articleContent).then( res => {
-          console.log(res);
+          if(res == '-1') {
+            this.$toast.show('已存在同名文章！', 3000)
+          }
+          else {
+            this.$toast.show('修改成功！', 3000)
+            this.$emit('articleChange')
+          }
         })
 
       },
@@ -221,6 +227,7 @@
     border: 0;
     outline:none;
     border-radius: 8px;
+    background-color: #fff;
   }
 
   /*标签*/

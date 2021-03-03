@@ -7,6 +7,7 @@ const BlogDetail = () => import('views/blogDetail/BlogDetail')
 const Message = () => import('views/message/Message')
 const Other = () => import('views/other/Other')
 const Login = () => import('views/login/Login')
+const WriteBlog = () => import('views/writeBlog/WriteBlog')
 
 const Test = () => import('views/test/Test')
 
@@ -51,6 +52,10 @@ const routes = [
   {
     path: '/login',
     component: Login
+  },
+  {
+    path: '/writeBlog',
+    component: WriteBlog
   },
   {
     path: '/test',

@@ -324,3 +324,38 @@ exports.modifyArticle = function(params, callback) {
   })
 
 }
+
+//修改文章
+exports.addArticle = function(params, callback) {
+
+  console.log(1111111111)
+  db.find("Article",{'title': params.title},function(err, result){
+
+    if(err){
+      return callback("-3")//服务器错误
+    }
+    if(result.length == 0){
+      db.insertOne("Article",{
+        'title': params.title,
+        'author': params.author,
+        'kind': params.kind,
+        'describe': params.describe,
+        'label': params.label,
+        'content': params.content,
+        'picture': params.picture,
+        "commentTime" : (new Date()).valueOf(),
+      },function(err,result){
+        if(err){
+          return callback("-3")//服务器错误
+        }
+        else{
+          return callback("1")//添加成功
+        }
+      });
+    }
+    else{
+      return callback("-1")//存在同名文章
+    }
+  })
+
+}

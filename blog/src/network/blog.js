@@ -87,3 +87,20 @@ export function modifyArticle(id, articleName, articleAuthor, articleKind, artic
     url: '/blog/modifyArticle',
   })
 }
+
+//添加文章
+export function addArticle(articleName, articleAuthor, articleKind, articleDescribe, articleLabel, picture, articleContent) {
+  return request({
+    method: 'post',
+    data: {
+      'title': articleName,
+      'author': articleAuthor,
+      'kind': articleKind,
+      'describe': articleDescribe,
+      'label': articleLabel,
+      'picture': picture,
+      'content': articleContent
+    },
+    url: '/blog/addArticle',
+  })
+}

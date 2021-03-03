@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var ejs = require('ejs')
+var bodyParser = require('body-parser')
 
 var indexRouter = require('./routes');
 var homeRouter = require('./routes/home');
@@ -36,6 +37,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.use(bodyParser.json({limit:'50mb'}));
+app.use(bodyParser.urlencoded({limit:'50mb',extended:true}));
 
 
 app.use('/', indexRouter);
