@@ -76,4 +76,12 @@ router.post('/addArticle', function(req, res, next) {
   })
 });
 
+//删除文章
+router.post('/deleteArticle', function(req, res, next) {
+  let params = req.body;
+  article.deleteArticle(params,data => {
+    res.send(data);
+  })
+});
+
 module.exports = router

@@ -22,7 +22,7 @@
                    :style="{'background-color': randomColor(item)}">{{item}}</span>
         </div>
         <br/><br/>
-        <div class="article-operation" v-show="isLogin">
+        <div class="article-operation" v-show="isLogin" ref="operationButton">
           <div class="article-modify" @click="articleModify()">编辑</div>
           <div class="article-delete" @click="articleDelete()">删除</div>
         </div>
@@ -41,6 +41,20 @@
         </div>
       </div>
       <modify-article v-else :article="article" @scrollTop="scrollTop" @articleChange="articleChange"/>
+
+      <dialog-message ref="message"
+                      :is-show="dialogShow"
+                      wid-num="30%"
+                      left-site="35%"
+                      :top-distance="topDistance"
+                      :dialog-kind="2"
+                      @dialogClose="dialogClose"
+                      @chooseYes="chooseYes"
+                      @chooseNo="chooseNo">
+        <div slot="header">提醒</div>
+        <div slot="main">确认删除该文章吗？</div>
+      </dialog-message>
+
       <floor class="floor"/>
     </scroll>
 
@@ -55,15 +69,18 @@
   import WriteComment from "@/components/content/writeComment/WriteComment";
   import TinymceEditor from "@/components/common/tinymceEditor/TinymceEditor";
   import ModifyArticle from "@/views/blogDetail/childrenComponent/modifyArticle";
+  import DialogMessage from "@/components/common/dialogMessage/DialogMessage";
 
   import { mapGetters } from 'vuex'
   import {randomColorMixin, showBackTop, scrollSet, checkLogin} from "../../common/mixin";
   import {findArticle} from "../../network/home";
+  import {deleteArticle} from "@/network/blog";
 
   export default {
     name: "BlogDetail",
-    inject: ['reload'],
+    inject: ['reload', 'refreshNavbar'],
     components: {
+      DialogMessage,
       ModifyArticle,
       TinymceEditor,
       ShowComment,
@@ -84,6 +101,9 @@
         },
         keys: 0,
         isOperation: false,
+        dialogShow: false,
+        topDistance: '35%',
+
       }
     },
     created() {
@@ -120,7 +140,29 @@
         this.scrollToTop()
       },
       articleDelete() {
-
+        this.topDistance = this.$refs.operationButton.offsetTop + 'px'
+        this.dialogShow = true
+      },
+      dialogClose() {
+        this.dialogShow = false
+      },
+      chooseYes() {
+        this.dialogShow = false
+        deleteArticle(this.article.id).then( res => {
+          if(res.state === 1){
+            this.$toast.show('删除文章成功！', 3000)
+            this.$router.replace('/blog').catch(err=>err)
+            this.refreshNavbar()
+          }
+          else{
+            this.$toast.show('删除失败！', 3000)
+          }
+        })
+        /*this.$toast.show('删除评论成功！', 3000)
+        this.refresh()*/
+      },
+      chooseNo() {
+        this.dialogShow = false
       },
       scrollTop() {
         this.isOperation = false
@@ -144,7 +186,6 @@
   .blog-detail {
     position: relative;
     height: 100vh;
-    background-color: #fff;
     background-image: none;
   }
 
@@ -167,7 +208,7 @@
     position:relative;
   }
 
-  .detail:before, .detail-modify:before{
+  .blog-detail:before{
     position: absolute;
     background-image: url('../../assets/img/BlogDetail/几何元素背景.jpg');
     background-size:contain;/*

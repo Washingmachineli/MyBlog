@@ -40,8 +40,8 @@ export default {
   data() {
     return {
       disabled: false,
-      plugins: '',
-      toolbar: 'undo redo | bold italic forecolor backcolor'
+      plugins: 'emoticons',
+      toolbar: 'undo redo | bold italic forecolor backcolor emoticons'
     }
   },
   methods: {

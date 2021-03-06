@@ -11,8 +11,9 @@
       </div>
       <div id="content" class="content-article">
         <article-info class="article-info" :article-info="articleInfo"  @articleLoad="articleLoad"/>
-        <kind-show class="kind-show" :kind-info="kindInfo"/>
-        <last-comment class="last-comment" :comment-info="lastComment"/>
+        <kind-show class="kind-show" :kind-info="kindInfo"/><!--
+        <last-comment class="last-comment" :comment-info="lastComment"/>-->
+        <scroll-view class="last-comment" :comment-info="lastComment"/>
       </div>
       <floor class="floor"/>
     </scroll>
@@ -33,11 +34,13 @@
   import {articleListMixin, scrollSet, showBackTop, checkLogin} from "../../common/mixin";
   import {getComment} from "@/network/blog";
   import {debounce} from "@/common/utils";
+  import ScrollView from "@/components/common/scrollView/ScrollView";
 
   export default {
     name: "Home",
     mixins: [articleListMixin, scrollSet, showBackTop, checkLogin],
     components: {
+      ScrollView,
       BeatText,
       ArticleInfo,
       KindShow,

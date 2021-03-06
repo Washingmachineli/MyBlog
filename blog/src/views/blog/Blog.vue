@@ -114,6 +114,12 @@
     src: url('~assets/font/小熊冻冻奶.ttf'); /* IE9+ */
   }
 
+  @font-face
+  {
+    font-family: BlogBannerFont;
+    src: url('~assets/font/人间便利店.ttf'); /* IE9+ */
+  }
+
  /* .blog {
     position: relative;
     height: 100vh;
@@ -161,7 +167,7 @@
     font-size: 60px;
     display: table-cell;
     vertical-align: middle;
-    font-family: myFirstFont;
+    font-family: BlogBannerFont;
     line-height: 70px;
   }
 

@@ -1,47 +1,33 @@
 <template>
-  <div>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <div @click="dialogOpen">open</div>
-    <dialog-message :is-show="dialogShow"
-                    :wid-num="50"
-                    :left-site="25"
-                    :dialog-kind="2"
-                    @dialogClose="dialogClose"
-                    @chooseNo="dialogClose"
-                    @chooseYes="dialogClose"/>
+  <div class="test">
+     <scroll-view style="width: 50%; height: 400px;"  :comment-info="lastComment"/>
   </div>
 </template>
 
 <script>
-  import DialogMessage from "@/components/common/dialogMessage/DialogMessage";
+  import ScrollView from "@/components/common/scrollView/ScrollView";
+  import {getComment} from "@/network/blog";
   export default {
     name: "Test",
+    components: {ScrollView},
     data() {
       return {
-        dialogShow: false
+        page: 0,
+        lastComment: {}
       }
     },
-    components: {
-      DialogMessage
-
-    },
-    methods: {
-      dialogClose() {
-        this.dialogShow = false
-      },
-      dialogOpen() {
-        this.dialogShow = true
-      },
+    created() {
+      getComment(null, this.page).then( res => {
+        this.lastComment = res.data
+      })
     }
   }
 </script>
 
 <style scoped>
 
+.test{
+  position: relative;
+  top: 65px;
+}
 </style>

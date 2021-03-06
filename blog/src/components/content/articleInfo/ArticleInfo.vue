@@ -7,7 +7,7 @@
       <div class="info">
         <div class="title" @click="titleClick(item.id)">{{item.title}}</div>
         <div class="author">{{item.author}}</div>
-        <div class="describe">简介：{{item.describe}}</div>
+        <div class="describe">简介：{{item.describe?item.describe:'暂无简介'}}</div>
         <div class="other">
           <span class="label"
                 v-for="x in item.label"

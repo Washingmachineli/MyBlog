@@ -72,16 +72,17 @@ export function getComment(article, page) {
 }
 
 //修改文章
-export function modifyArticle(id, articleName, articleAuthor, articleKind, articleDescribe, articleLabel, articleContent) {
+export function modifyArticle(id, articleName, articleAuthor,  articleLabel, articleKind, articleDescribe, articleImg, articleContent) {
   return request({
     method: 'post',
     data: {
       'id': id,
       'title': articleName,
       'author': articleAuthor,
+      'label': articleLabel,
       'kind': articleKind,
       'describe': articleDescribe,
-      'label': articleLabel,
+      'picture': articleImg,
       'content': articleContent
     },
     url: '/blog/modifyArticle',
@@ -102,5 +103,17 @@ export function addArticle(articleName, articleAuthor, articleKind, articleDescr
       'content': articleContent
     },
     url: '/blog/addArticle',
+  })
+}
+
+
+//删除文章
+export function deleteArticle(id) {
+  return request({
+    method: 'post',
+    data: {
+      'id': id,
+    },
+    url: '/blog/deleteArticle',
   })
 }

@@ -54,9 +54,8 @@
     //刷新vue-router
     provide (){
       return {
-        reload:this.reload,/*
-        signIn: this.signIn,
-        signOut: this.signOut,*/
+        reload:this.reload,
+        refreshNavbar: this.refreshNavbar
       }
     },
     data() {
@@ -115,30 +114,15 @@
         this.$store.dispatch('signOut')
         this.reload()
         this.$router.replace('/home')
-      }
-      /*signIn() {
-        this.adminMenu = {
-          '主页': [],
-          '写博客': [],
-          '博客': [],
-          '留言': [],
-          '其他': [],
-        }
-        this.adminLink = [
-          '/home',
-          '/writeBlog',
-          '/blog',
-          '/message',
-          '/other'
-        ]
-        getArticleKind().then( data => {
-          this.adminMenu['博客'].push(...data)
-          this.isLogin = true
-        })
       },
-      signOut() {
-        this.isLogin = false
-      }*/
+      refreshNavbar() {
+        this.menu['博客'] = []
+        this.adminMenu['博客'] = []
+        getArticleKind().then( data => {
+          this.menu['博客'].push(...data)
+          this.adminMenu['博客'].push(...data)
+        })
+      }
     },
     mounted() {
       this.isReady = true

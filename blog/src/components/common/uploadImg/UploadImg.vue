@@ -14,10 +14,20 @@
 <script>
   export default {
     name: "UploadImg",
+    props: {
+      img: {
+        type: String,
+        default: ''
+      },
+      imgShow: {
+        type: Boolean,
+        default: false,
+      }
+    },
     data() {
       return {
-        imgSrc:"000",
-        isReady: false
+        imgSrc: this.img,
+        isReady: this.imgShow
       }
     },
     methods:{

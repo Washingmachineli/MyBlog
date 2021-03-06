@@ -63,10 +63,14 @@
       <br/>
       <br/>
       <br/>
+      <div class="table-img">
+        <div class="table-img-title">封面：</div>
+        <div class="table-img-content"><upload-img :img="article.picture" :img-show="true" ref="uploadImg"/></div>
+      </div>
     </div>
     <tinymce-editor ref="editor"
                     :disabled="disabled"
-                    :height="1000"
+                    :height="400"
                     :plugins="plugins"
                     :toolbar="toolbar"
                     :value="article.content"/>
@@ -87,10 +91,13 @@
   import {randomColorMixin} from "@/common/mixin";
   import {getArticleKind} from "@/network/app";
   import {modifyArticle} from "@/network/blog";
+  import UploadImg from "@/components/common/uploadImg/UploadImg";
 
   export default {
     name: "modifyArticle",
+    inject:['refreshNavbar'],
     components: {
+      UploadImg,
       SelectList,
       TinymceEditor
     },
@@ -133,14 +140,16 @@
         let articleLabel = this.article.label
         let articleKind = this.$refs.selectKind.getValue()
         let articleDescribe = document.getElementById('articleDescribe').value
+        let articleImg= this.$refs.uploadImg.getValue()
         let articleContent = this.$refs.editor.getValue()
-        modifyArticle(id, articleName, articleAuthor, articleKind, articleDescribe, articleLabel, articleContent).then( res => {
+        modifyArticle(id,articleName, articleAuthor,  articleLabel, articleKind, articleDescribe, articleImg, articleContent).then( res => {
           if(res == '-1') {
             this.$toast.show('已存在同名文章！', 3000)
           }
           else {
             this.$toast.show('修改成功！', 3000)
             this.$emit('articleChange')
+            this.refreshNavbar()
           }
         })
 
@@ -388,5 +397,16 @@
     border: 0;
     outline:none;
     border-radius: 8px;
+  }
+
+
+  .table-img {
+    padding: 10px 0;
+    line-height: 150px;
+  }
+
+  .table-img div{
+    display: inline-block;
+    line-height: 40px;
   }
 </style>

@@ -130,41 +130,6 @@ exports.findArticle = function(params, callback) {
 
 //获取指定分类下的文章
 exports.getArticleByKind = function(params, callback) {
- /* db.getAllCount("Article", {'kind': params.kind}, function (err, result) {
-
-    if (err) {
-      return callback("-3")//服务器错误
-    } else {
-      let length = result;
-      db.find("Article",{'kind': params.kind}, {sort:{'createTime': -1}, page: params.page, pageamount: 5},function(err, result){
-
-        if(err){
-          return callback("-3")//服务器错误
-        }
-        if(result.length == 0){
-          return callback("-1")//查无
-        }
-        else{
-          let res = []
-          let i = 0
-          while (result[i])
-          {
-            res['data'][i] = {
-              id: result[i]._id,
-              title: result[i].title,
-              author: result[i].author,
-              describe: result[i].describe,
-              label: result[i].label,
-              picture: result[i].picture,
-              createTime: result[i].createTime,
-            }
-            i++
-          }
-          return callback(res)
-        }
-      })
-    }
-  })*/
   db.find("Article",{'kind': params.kind}, {sort:{'createTime': -1}, page: params.page, pageamount: 5},function(err, result){
 
     if(err){
@@ -306,7 +271,7 @@ exports.modifyArticle = function(params, callback) {
       return callback("-3")//服务器错误
     }
     if(result.length == 0){
-      db.updateMany("Article",{'_id': ObjectID(params.id)}, {$set: {'title': params.title, 'author': params.author, 'kind': params.kind,  'describe': params.describe,  'label': params.label,  'content': params.content }},function(err, result){
+      db.updateMany("Article",{'_id': ObjectID(params.id)}, {$set: {'title': params.title, 'author': params.author, 'label': params.label,  'kind': params.kind,  'describe': params.describe,  'picture': params.picture,  'content': params.content }},function(err, result){
         if(err){
           return callback("-3")//服务器错误
         }
@@ -325,10 +290,9 @@ exports.modifyArticle = function(params, callback) {
 
 }
 
-//修改文章
+//添加文章
 exports.addArticle = function(params, callback) {
 
-  console.log(1111111111)
   db.find("Article",{'title': params.title},function(err, result){
 
     if(err){
@@ -358,4 +322,23 @@ exports.addArticle = function(params, callback) {
     }
   })
 
+}
+
+//删除文章
+exports.deleteArticle= function(params, callback) {
+
+  db.deleteMany("Article", {'_id': ObjectID(params.id)}, function(err, result){
+
+    let res = {}
+    if(err){
+      res['state'] = -3
+      return callback(res)//服务器错误
+    }
+    else{
+
+      res['state'] = 1
+
+      return callback(res)
+    }
+  })
 }

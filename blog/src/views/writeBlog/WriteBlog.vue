@@ -11,13 +11,13 @@
             标题：
           </div>
           <div class="title-table-info">
-            <input class="title-table-name" id="articleName"  autocomplete="off"  type="text"  ref="articleName">
+            <input class="title-table-name" id="articleName" v-model="articleTitle" autocomplete="off"  type="text"  ref="articleName">
           </div><br/><br/>
           <div>
             作者：
           </div>
           <div class="title-table-info">
-            <input class="title-table-author" id="articleAuthor"  autocomplete="off"  type="text"  ref="articleAuthor">
+            <input class="title-table-author" id="articleAuthor" v-model="articleAuthor" autocomplete="off"  type="text"  ref="articleAuthor">
           </div>
         </div>
         <br/><br/><br/><br/>
@@ -44,7 +44,7 @@
             分类：
           </div>
           <div class="table-kind-select">
-            <select-list :article-kind="articleKinds" :choose="chooseKinds" ref="selectKind"/>
+            <select-list :article-kind="articleKinds" :choose="chooseKind" ref="selectKind"/>
           </div>
           <div v-if="!isAddKind" class="table-kind-button">
             <div class="add-kind" @click="addKind()">添加分类</div>
@@ -62,7 +62,7 @@
               简介：
             </div>
             <div class="table-describe-info">
-              <textarea class="table-describe-content" style='resize: none;' id="articleDescribe" type="text"  ref="articleName"></textarea>
+              <textarea class="table-describe-content" style='resize: none;' id="articleDescribe" v-model="articleDescribe"  type="text"  ref="articleName"></textarea>
             </div>
           </div>
           <br/>
@@ -70,15 +70,16 @@
           <br/>
           <br/>
           <div class="table-img">
-            <div class="table-img-title">背景：</div>
+            <div class="table-img-title">封面：</div>
             <div class="table-img-content"><upload-img ref="uploadImg"/></div>
           </div>
         </div>
         <tinymce-editor ref="editor"
                         :disabled="disabled"
-                        :height="1000"
+                        :height="400"
                         :plugins="plugins"
-                        :toolbar="toolbar"/>
+                        :toolbar="toolbar"
+                        :value="articleContent"/>
         <br/>
         <div class="article-operation">
           <div class="article-modify" @click="articleConfirmModify()">发布</div>
@@ -107,6 +108,7 @@ import UploadImg from "@/components/common/uploadImg/UploadImg";
 
 export default {
   name: "WriteBlog",
+  inject:['reload', 'refreshNavbar'],
   components: {
     UploadImg,
     SelectList,
@@ -118,14 +120,15 @@ export default {
       isAddLabel: false,
       isAddKind: false,
       disabled: false,
-      plugins: '',
-      toolbar: 'undo redo | bold italic forecolor backcolor',
+      plugins: 'lists image media table wordcount emoticons',
+      toolbar: 'undo redo |  formatselect | emoticons bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat',
       articleLabel: [],
       articleKinds: ['san','1','3'],
       articleTitle: '',
       articleAuthor: '',
       articleDescribe: '',
-      chooseKinds: ''
+      chooseKind: '',
+      articleContent: ''
     }
   },
   computed:{
@@ -149,25 +152,53 @@ export default {
       let articleImg= this.$refs.uploadImg.getValue()
       let articleContent = this.$refs.editor.getValue()
 
-      addArticle(articleName, articleAuthor, articleKind, articleDescribe, articleLabel, articleImg, articleContent).then( res => {
-        if(res == '-1') {
-          this.$toast.show('已存在同名文章！', 3000)
-        }
-        else if(res == '1')
-        {
-          this.$toast.show('发布成功！', 3000)
-          //重置
-          this.articleLabel = []
-          this.articleTitle = ''
-          this.articleAuthor = ''
-          this.articleDescribe = ''
-          this.chooseKinds = ''
-          getArticleKind().then( res => {
-            this.articleKinds = res
-          })
-        }
-      })
-    },
+      if(articleName == ''){
+        this.$toast.show('请填写文章名！', 3000)
+        this.scrollToTop()
+      }
+      else if(articleAuthor == '') {
+        this.$toast.show('请填写作者！', 3000)
+        this.scrollToTop()
+      }
+      else if(articleKind == '') {
+        this.$toast.show('请选择文章分类！', 3000)
+        this.scrollToTop()
+      }
+      else if(articleImg == '') {
+        this.$toast.show('请选择一张图片作为封面！', 3000)
+        this.scrollToTop()
+      }
+      else if(articleContent == '') {
+        this.$toast.show('内容不能为空！', 3000)
+        this.scrollToTop()
+      }
+      else{
+        addArticle(articleName, articleAuthor, articleKind, articleDescribe, articleLabel, articleImg, articleContent).then( res => {
+          if(res == '-1') {
+            this.$toast.show('已存在同名文章！', 3000)
+          }
+          else if(res == '1')
+          {
+            this.$toast.show('发布成功！', 3000)
+            //重置
+            this.articleLabel = []
+            this.articleTitle = ''
+            this.articleAuthor = ''
+            this.articleDescribe = ''
+            this.chooseKind = ''
+            this.articleContent = ''
+            this.$refs.uploadImg.cancel()
+
+            getArticleKind().then( res => {
+              this.articleKinds = res
+            })
+            this.scrollToTop()
+            this.reload()
+            this.refreshNavbar()
+          }
+        })
+      }
+      },
     //添加标签
     addLabel() {
       this.isAddLabel = true
@@ -195,9 +226,21 @@ export default {
       this.isAddKind = true
     },
     confirmAddKind() {
-      this.articleKinds.push(document.getElementById('newKind').value)
-      this.chooseKinds = document.getElementById('newKind').value
-      this.isAddKind = false
+
+      let newKind = document.getElementById('newKind').value
+      if(this.articleKinds.indexOf(newKind) !== -1)
+      {
+        this.$toast.show('已存在该分类！', 3000)
+      }
+      else if(newKind == '') {
+        this.$toast.show('分类不能为空！', 3000)
+      }
+      else {
+        this.articleKinds.push(document.getElementById('newKind').value)
+        this.isAddKind = false
+      }
+
+
     }
   }
 }
@@ -208,8 +251,21 @@ export default {
   .write-blog {
     position: relative;
     height: 100vh;
-    background-color: #fff;
     background-image: none;
+  }
+
+  .write-blog:before{
+    position: absolute;
+    background-image: url('../../assets/img/BlogDetail/几何元素背景.jpg');
+    background-size:contain;/*
+    background-image: url("~assets/img/BlogDetail/雪压梅花枝.png");*/
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    content: '';
+    opacity: .2;
+    z-index: -1;
   }
 
   .scroll {
@@ -224,20 +280,6 @@ export default {
   .detail-modify {
     padding: 25px 15%;
     position:relative;
-  }
-
-  .detail-modify:before{
-    position: absolute;
-    background-image: url('../../assets/img/BlogDetail/几何元素背景.jpg');
-    background-size:contain;/*
-    background-image: url("~assets/img/BlogDetail/雪压梅花枝.png");*/
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    content: '';
-    opacity: .2;
-    z-index: -1;
   }
 
   .article-operation {
@@ -391,6 +433,7 @@ export default {
     align-items: center;
     vertical-align: middle;
     position: relative;
+    background-color: #fff;
   }
 
   .table-kind-content{

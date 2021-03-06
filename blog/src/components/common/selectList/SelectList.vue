@@ -22,11 +22,8 @@
     },
     data() {
       return {
-        chooseItem: ''
+        chooseItem: this.choose
       }
-    },
-    created() {
-      this.chooseItem = this.choose
     },
     methods: {
       getValue() {

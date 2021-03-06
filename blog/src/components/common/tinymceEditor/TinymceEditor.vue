@@ -21,6 +21,7 @@
   import 'tinymce/plugins/table'// 插入表格插件
   import 'tinymce/plugins/lists'// 列表插件
   import 'tinymce/plugins/wordcount'// 字数统计插件
+  import 'tinymce/plugins/emoticons'// 表情插件
   export default {
 
     name: "TinymceEditor",
@@ -48,11 +49,11 @@
       },
       plugins: {
         type: [String, Array],
-        default: 'lists image media table wordcount'
+        default: 'lists image media table wordcount emoticons'
       },
       toolbar: {
         type: [String, Array],
-        default: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat'
+        default: 'undo redo | emoticons formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat'
       }
     },
     data () {
@@ -69,6 +70,7 @@
           toolbar: this.toolbar,
           branding: false,
           menubar: false,
+          emoticons_database_url: `${this.baseUrl}/tinymce/emoticons/js/emojis.js`,
           // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
           // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler
           images_upload_handler: (blobInfo, success, failure) => {

@@ -75,8 +75,8 @@ export const articleListByKindMixin = {
     }
     //页面刷新时，将vuex中指定值的信息保存到sessionStorage里
     window.addEventListener("beforeunload", () => {
-      sessionStorage.setItem("articleKind", "");
-      sessionStorage.setItem("articleKind", this.articleKind);
+      sessionStorage.setItem("articleKind", "")
+      sessionStorage.setItem("articleKind", this.articleKind)
     });
     this._getLabel()
     this._getArticleInfo()
@@ -85,8 +85,17 @@ export const articleListByKindMixin = {
     //获取所有文章信息,取消异步，同步执行
     async _getArticleInfo() {
       await getArticleByKind(this.articleKind, this.page).then( res => {
-        this.articleInfo.push(...res)
-        this.page = this.page + 1
+        if(res === -1){
+          articleKind().then( res => {
+            this.$store.dispatch('changeArticleKind', res[1])
+            sessionStorage.setItem("articleKind", res[1])
+            this._getArticleInfo()
+          })
+        }
+        else {
+          this.articleInfo.push(...res)
+          this.page = this.page + 1
+        }
       })
     },
     //获取所有标签

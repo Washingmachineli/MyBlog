@@ -13,6 +13,10 @@ var commentRouter = require('./routes/comment');
 
 var app = express();
 
+app.use(bodyParser.json({limit:'50mb'}));
+app.use(bodyParser.urlencoded({limit:'50mb',extended:true}));
+app.use(express.json({limit: '50mb'}));
+
 
 app.all("*", function (req, res, next) {
   //设置允许跨域的域名，*代表允许任意域名跨域
@@ -27,6 +31,8 @@ app.all("*", function (req, res, next) {
     next();
 })
 
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', ejs.__express)
@@ -39,9 +45,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use(bodyParser.json({limit:'50mb'}));
-app.use(bodyParser.urlencoded({limit:'50mb',extended:true}));
-app.use(express.json({limit: '50mb'}))
 
 
 app.use('/', indexRouter);

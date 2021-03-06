@@ -30,8 +30,11 @@ exports.getComment = function(params, callback) {
         'article': article
     }
 
+    let pageamount = 5
+
     if(article === null) {
         json = {}
+        pageamount = 6
     }
 
     db.getAllCount("Comment", json, function (err, result) {
@@ -40,7 +43,7 @@ exports.getComment = function(params, callback) {
             return callback("-3")//服务器错误
         } else {
             let length = result;
-            db.find("Comment", json,{sort:{'commentTime': -1}, page: params.page, pageamount: 5}, function(err, result){
+            db.find("Comment", json,{sort:{'commentTime': -1}, page: params.page, pageamount: pageamount}, function(err, result){
 
                 if(err){
                     return callback("-3")//服务器错误

@@ -3,7 +3,7 @@
     <div class="title">
       文章分类
     </div>
-    <div>
+    <div class="kind-div">
       <span class="kind"
             v-for="x in kindInfo"
             :style="{'background-color': randomColor(x)}"
@@ -57,12 +57,22 @@
     color: black;
   }
 
+  .kind-div {
+    padding: 0 10px;
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;text-align: center;
+
+  }
+
   .kind {
-    margin: 0 5px;
+    margin:10px auto;
     padding: 2px 5px;
     border-radius: 5px;/*
     background-color: red;*/
     color: white;
+    line-height: 25px;
   }
 
   .kind:hover {
