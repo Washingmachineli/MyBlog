@@ -1,5 +1,5 @@
 <template>
-  <div class="write-blog">
+  <div class="write-blog" v-if="this.isLogin">
     <scroll class="scroll"
             ref="scroll"
             :probe-type="3"
@@ -135,8 +135,6 @@ export default {
     ...mapGetters(['articleKind']),
   },
   created() {
-
-
 
     getArticleKind().then( res => {
       this.articleKinds = res

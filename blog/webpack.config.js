@@ -11,5 +11,11 @@ module.exports = {
       title: 'Webpack Vue',
       template:'./public/index.html'
     })
-  ]
+  ],
+  build: {
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: './',
+    productionSourceMap: true,
+  }
 };

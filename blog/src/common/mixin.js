@@ -87,8 +87,8 @@ export const articleListByKindMixin = {
       await getArticleByKind(this.articleKind, this.page).then( res => {
         if(res === -1){
           articleKind().then( res => {
-            this.$store.dispatch('changeArticleKind', res[1])
-            sessionStorage.setItem("articleKind", res[1])
+            this.$store.dispatch('changeArticleKind', res[0])
+            sessionStorage.setItem("articleKind", res[0])
             this._getArticleInfo()
           })
         }
@@ -194,11 +194,12 @@ export const scrollSet = {
 
 //检查是否登录
 export const checkLogin = {
-  inject:  ['reload'],
+  inject:  ['reload', 'toLoading', 'finishLoading'],
   computed: {
     ...mapGetters(['token', 'isLogin']),
   },
   created() {
+
     let t = null
     if(this.token === null)
     {
@@ -208,12 +209,13 @@ export const checkLogin = {
       t = this.token
     }
 
+
     checkToken(t).then( res => {
       if(res.state === 0) {
         sessionStorage.removeItem("token");
         this.$store.dispatch('clearToken')
         this.$store.dispatch('signOut')
-        this.reload()
+        if(this.$route.path == '/writeBlog') this.$router.replace('/home').catch(err=>err)
       }
       else {
         this.$store.dispatch('signIn')

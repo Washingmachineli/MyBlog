@@ -12,7 +12,7 @@
           <span class="label"
                 v-for="x in item.label"
                 :style="{'background-color': randomColor(x)}">{{x}}</span>
-          <div class="creat-time">{{item.createTime}}</div>
+          <div class="creat-time">{{item.createTime | dataStringToDate}}</div>
         </div>
       </div>
     </div>
@@ -21,6 +21,7 @@
 
 <script>
   import {debounce} from "../../../common/utils";
+  import {toDate} from "../../../common/utils";
   import {randomColorMixin} from "../../../common/mixin";
 
   export default {
@@ -35,6 +36,12 @@
         type: Object,
         default: ()=>{}
       }*/
+    },
+    filters: {
+      dataStringToDate(value) {
+        let date = toDate(value)
+        return date
+      }
     },
     methods: {
       //图片加载好后，将高度发送给父组件
@@ -60,11 +67,6 @@
 
 <style scoped>
 
-  @font-face
-  {
-    font-family: articleTitle;
-    src: url('~assets/font/人间便利店.ttf'); /* IE9+ */
-  }
 
   @font-face
   {
@@ -116,7 +118,7 @@
   }
 
   .title, .author{
-    font-family: articleTitle;
+    font-family: '华文楷体';
   }
 
   .title {
@@ -133,7 +135,8 @@
   .describe {
     padding-top: 15px;
     font-size: 20px;
-    font-family: '楷体';
+    line-height: 30px;
+    font-family: describeTitle;
   }
 
   .other {

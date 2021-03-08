@@ -11,9 +11,8 @@
       </div>
       <div id="content" class="content-article">
         <article-info class="article-info" :article-info="articleInfo"  @articleLoad="articleLoad"/>
-        <kind-show class="kind-show" :kind-info="kindInfo"/><!--
-        <last-comment class="last-comment" :comment-info="lastComment"/>-->
-        <scroll-view class="last-comment" :comment-info="lastComment"/>
+        <kind-show class="kind-show" :kind-info="kindInfo"/>
+        <last-comment class="last-comment" :comment-info="lastComment"/>
       </div>
       <floor class="floor"/>
     </scroll>
@@ -54,29 +53,26 @@
         lastComment: {},
       }
     },
-    methods: {
-      pullingUp() {
-
-
-        const article = debounce(() => {
-          this._getArticleInfo()
-          this.$refs.scroll.finishPullUp()
-        },500)
-
-        article()
-      },
-      signout() {
-        sessionStorage.removeItem('token');
-
-        this.$store.dispatch('signOut')
-      }
-    },
     created() {
 
       getComment(null, this.page).then( res => {
         this.lastComment = res.data
       })
 
+    },
+    methods: {
+      pullingUp() {
+        const article = debounce(() => {
+          this._getArticleInfo()
+          this.$refs.scroll.finishPullUp()
+        },500)
+        article()
+      },
+      /*signout() {
+        sessionStorage.removeItem('token');
+
+        this.$store.dispatch('signOut')
+      }*/
     },
   }
 </script>

@@ -62,6 +62,8 @@
           language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,
           language: 'zh_CN',
           skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide`,
+          //设置tab键为缩进
+          nonbreaking_force_tab: true,
           content_css: `${this.baseUrl}/tinymce/skins/content/default/content.css`,
           // skin_url: `${this.baseUrl}/tinymce/skins/ui/oxide-dark`, // 暗色系
           // content_css: `${this.baseUrl}/tinymce/skins/content/dark/content.css`, // 暗色系
@@ -70,6 +72,14 @@
           toolbar: this.toolbar,
           branding: false,
           menubar: false,
+          style_formats: [
+            {
+              title: '首行缩进',
+              block: 'p',
+              styles: { 'text-indent': '2em' }
+            }
+          ],
+          //配置表情包图片文件地址
           emoticons_database_url: `${this.baseUrl}/tinymce/emoticons/js/emojis.js`,
           // 此处为图片上传处理函数，这个直接用了base64的图片形式上传图片，
           // 如需ajax上传可参考https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_handler

@@ -32,6 +32,7 @@
       </div>
     </div>
     <div v-else>
+
       <router-view class="router-view"/>
     </div>
   </div>
@@ -54,8 +55,10 @@
     //刷新vue-router
     provide (){
       return {
-        reload:this.reload,
-        refreshNavbar: this.refreshNavbar
+        reload: this.reload,
+        refreshNavbar: this.refreshNavbar,
+        toLoading: this.toLoading,
+        finishLoading: this.finishLoading,
       }
     },
     data() {
@@ -122,6 +125,12 @@
           this.menu['博客'].push(...data)
           this.adminMenu['博客'].push(...data)
         })
+      },
+      toLoading() {
+        this.isReady = false
+      },
+      finishLoading() {
+        this.isReady = true
       }
     },
     mounted() {

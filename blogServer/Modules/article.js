@@ -307,7 +307,7 @@ exports.addArticle = function(params, callback) {
         'label': params.label,
         'content': params.content,
         'picture': params.picture,
-        "commentTime" : (new Date()).valueOf(),
+        "createTime" : (new Date()).valueOf(),
       },function(err,result){
         if(err){
           return callback("-3")//服务器错误
