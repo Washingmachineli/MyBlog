@@ -5,7 +5,7 @@
         <img v-lazy="item.picture" @load="pictureLoad"/>
       </div>
       <div class="info">
-        <div class="title" @click="titleClick(item.id)">{{item.title}}</div>
+        <div class="title" @click="titleClick(item.id)" :title="item.title">{{item.title}}</div>
         <div class="author">{{item.author}}</div>
         <div class="describe">简介：{{item.describe?item.describe:'暂无简介'}}</div>
         <div class="other">
@@ -119,6 +119,10 @@
 
   .title, .author{
     font-family: '华文楷体';
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
   }
 
   .title {
@@ -137,6 +141,15 @@
     font-size: 20px;
     line-height: 30px;
     font-family: describeTitle;
+
+    /*超过两行省略号显示*/
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
   .other {

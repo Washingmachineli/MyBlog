@@ -53,6 +53,7 @@
         lastComment: {},
       }
     },
+
     created() {
 
       getComment(null, this.page).then( res => {
